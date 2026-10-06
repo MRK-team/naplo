@@ -14,8 +14,8 @@
 <link rel="icon" type="image/png" href="icon-192.png">
 <title>MRKteam</title>
 <style>
-:root{--bg:#f4f4f2;--card:#fff;--ink:#161616;--mut:#6b6b6b;--acc:#111;--acc2:#ebebe8;--onacc:#fff;--ok:#166534;--okbg:#dcfce7;--brand:#d11a24;--warn:#a16207;--warnbg:#fef3c7;--line:#e3e3e0;--danger:#c81e1e;--oth:#1d4ed8;--othbg:#dbeafe;--redbg:#fde8e8}
-@media(prefers-color-scheme:dark){:root{--bg:#0e0e0e;--card:#1a1a1a;--ink:#f0f0f0;--mut:#9a9a9a;--acc:#ececec;--acc2:#2a2a2a;--onacc:#111;--ok:#4ade80;--okbg:#12301d;--brand:#ff4d57;--warn:#fbbf24;--warnbg:#3a2e0b;--line:#2c2c2c;--danger:#f87171;--oth:#93c5fd;--othbg:#172554;--redbg:#3b1212}}
+:root{--bg:#fafafa;--card:#fff;--ink:#161616;--mut:#6b6b6b;--acc:#d11a24;--acc2:#fde8e8;--onacc:#fff;--full:#161616;--onfull:#fff;--off:#ea580c;--offbg:#ffedd5;--ok:#166534;--okbg:#dcfce7;--brand:#d11a24;--warn:#a16207;--warnbg:#fef3c7;--line:#e6e6e6;--danger:#c81e1e;--oth:#1d4ed8;--othbg:#dbeafe;--redbg:#fde8e8}
+@media(prefers-color-scheme:dark){:root{--bg:#0e0e0e;--card:#1a1a1a;--ink:#f0f0f0;--mut:#9a9a9a;--acc:#e5333d;--acc2:#3a1518;--onacc:#fff;--full:#ececec;--onfull:#111;--off:#fb923c;--offbg:#3a2210;--ok:#4ade80;--okbg:#12301d;--brand:#ff4d57;--warn:#fbbf24;--warnbg:#3a2e0b;--line:#2c2c2c;--danger:#f87171;--oth:#93c5fd;--othbg:#172554;--redbg:#3b1212}}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 -apple-system,system-ui,sans-serif;padding-bottom:calc(150px + env(safe-area-inset-bottom))}
 header{position:sticky;top:0;background:#000;color:#fff;padding:calc(12px + env(safe-area-inset-top)) 16px 10px;display:flex;align-items:center;gap:10px;z-index:5}
@@ -36,8 +36,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 .pill{display:inline-block;padding:3px 10px;border-radius:99px;background:var(--okbg);color:var(--ok);font-weight:600;font-size:14px;white-space:nowrap}
 .pill.low{background:var(--warnbg);color:var(--warn)}
 .pill.zero{background:var(--line);color:var(--mut)}
-.pill.full{background:var(--acc);color:var(--onacc)}
-@media(prefers-color-scheme:dark){.pill.full{color:var(--onacc)}}
+.pill.full{background:var(--full);color:var(--onfull)}
 .big{width:100%;padding:16px;border-radius:14px;background:var(--acc);color:var(--onacc);font-size:18px;font-weight:700}
 @media(prefers-color-scheme:dark){.big{color:var(--onacc)}}
 .fab{position:fixed;left:16px;right:16px;bottom:calc(66px + env(safe-area-inset-bottom));max-width:528px;margin:0 auto}
@@ -62,7 +61,7 @@ input,textarea,select{width:100%;font:inherit;color:var(--ink);background:var(--
 .btns button{flex:1;padding:14px;border-radius:12px;font-weight:700;border:1px solid var(--line);background:var(--card)}
 .btns .ok{background:var(--acc);color:var(--onacc);border-color:var(--acc)}
 @media(prefers-color-scheme:dark){.btns .ok{color:var(--onacc)}}
-.btns .del{color:var(--danger);flex:0 0 auto}
+.btns .del{color:var(--danger);border-color:var(--danger);flex:0 0 auto}
 .warn{background:var(--warnbg);color:var(--warn);border-radius:12px;padding:12px;margin-bottom:12px;font-size:14px}
 .empty{text-align:center;color:var(--mut);padding:40px 10px}
 svg{width:100%;height:auto;display:block}
@@ -83,12 +82,12 @@ svg{width:100%;height:auto;display:block}
 .rrow{display:flex;gap:10px;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--line)}
 .rrow:last-child{border-bottom:0}
 .offbar{margin-bottom:10px}
-.offb{display:flex;width:100%;text-align:left;gap:8px;align-items:center;background:var(--redbg);color:var(--danger);border:1px solid var(--danger);border-radius:10px;padding:10px 12px;margin-bottom:8px;font-size:14px;font-weight:600}
-.offw{background:var(--redbg);color:var(--danger);font-weight:600}
-.cg-h.off b,.cg-h.off span{color:var(--danger)}
-.cg-h.off{box-shadow:inset 0 -3px 0 var(--danger)}
-.cg-c.off{background:var(--redbg);border-color:var(--danger);color:var(--danger)}
-.cg-c.off .cnt{color:var(--danger)}
+.offb{display:flex;width:100%;text-align:left;gap:8px;align-items:center;background:var(--offbg);color:var(--off);border:1px solid var(--off);border-radius:10px;padding:10px 12px;margin-bottom:8px;font-size:14px;font-weight:600}
+.offw{background:var(--offbg);color:var(--off);font-weight:600}
+.cg-h.off b,.cg-h.off span{color:var(--off)}
+.cg-h.off{box-shadow:inset 0 -3px 0 var(--off)}
+.cg-c.off{background:var(--offbg)!important;border-color:var(--off)!important;color:var(--off)!important}
+.cg-c.off .cnt{color:var(--off)!important}
 .chip.oth{border-color:var(--oth)}
 .chip.oth.on{background:var(--oth);border-color:var(--oth);color:#fff}
 @media(prefers-color-scheme:dark){.chip.oth.on{color:#0b1a33}}
@@ -139,8 +138,7 @@ svg{width:100%;height:auto;display:block}
 .cg-c.zero{background:var(--bg);color:var(--mut)}
 .cg-c.some{background:var(--acc2)}
 .cg-c.some .cnt{color:var(--ink)}
-.cg-c.full{background:var(--acc);color:var(--onacc);border-color:var(--acc)}
-@media(prefers-color-scheme:dark){.cg-c.full{color:var(--onacc)}}
+.cg-c.full{background:var(--full);color:var(--onfull);border-color:var(--full)}
 .cg-c.over{background:var(--warnbg);color:var(--warn)}
 .cg-c.tdy{box-shadow:inset 0 0 0 2.5px var(--acc)}
 .cg-e{min-height:58px;border-radius:8px;background:var(--line);opacity:.3}
@@ -158,6 +156,13 @@ svg{width:100%;height:auto;display:block}
 .dlgopts{display:flex;flex-direction:column;gap:8px;margin-top:16px}
 .dlgopts button{padding:14px;border-radius:12px;font-weight:700;border:1px solid var(--line);background:var(--card);text-align:center}
 .dlgopts button.ok{background:var(--acc);color:var(--onacc);border-color:var(--acc)}
+.dlgopts button.del{color:var(--danger);border-color:var(--danger)}
+.wch text{font-size:10px;fill:var(--mut)}
+.wch .gl{stroke:var(--line);stroke-width:1}
+.wch .yl{stroke:var(--mut);stroke-width:1;stroke-dasharray:3 3;opacity:.6}
+.wch .tip rect{fill:var(--ink)}
+.wch .tip text{fill:var(--bg);font-size:11px;font-weight:700}
+.wch .hit{fill:transparent;cursor:pointer}
 </style>
 </head>
 <body>
@@ -171,7 +176,7 @@ svg{width:100%;height:auto;display:block}
 
 <script>
 const PACK = 10;
-const VERSION = '2.2.1 · 2026.10.06.';
+const VERSION = '2.3 · 2026.10.06.';
 const capN = () => (db && db.cfg && db.cfg.cap) || 3;
 const TAGS = ['mell','hát','bicepsz','tricepsz','váll','láb','fenék','has','core','kardió','egyéb'];
 const DOW = ['Hétfő','Kedd','Szerda','Csütörtök','Péntek','Szombat','Vasárnap'];
@@ -217,12 +222,16 @@ function sanitize(d){
     });
   });
   d.slots = d.slots.filter(x => _ID(x.id) && /^\d{2}:\d{2}$/.test(x.time) && x.dow>=1 && x.dow<=7);
-  d.slots.forEach(x => { x.id=_ID(x.id); x.dow=Math.round(x.dow); x.dur=_NUM(x.dur)||60; });
+  d.slots.forEach(x => { x.id=_ID(x.id); x.dow=Math.round(x.dow); x.dur=_NUM(x.dur)||60;
+    ['from','to'].forEach(k => { if(!_DT(x[k])) delete x[k]; });
+    if(Array.isArray(x.no)){ x.no = x.no.filter(_DT); if(!x.no.length) delete x.no; } else delete x.no; });
   d.members = d.members.filter(x => _ID(x.id) && _ID(x.slotId) && _ID(x.clientId) && _DT(x.from) && (x.to==null || _DT(x.to)));
   d.members.forEach(x => { x.id=_ID(x.id); x.slotId=_ID(x.slotId); x.clientId=_ID(x.clientId); });
   [d.skips,d.extras].forEach((a,i) => { const k = i?'extras':'skips'; d[k] = a.filter(x => _ID(x.slotId) && _ID(x.clientId) && _DT(x.date)); d[k].forEach(x => { x.slotId=_ID(x.slotId); x.clientId=_ID(x.clientId); if(x.id!=null) x.id=_ID(x.id); }); });
   d.offs = d.offs.filter(x => _DT(x.from) && _DT(x.to));
-  d.offs.forEach(x => { x.id = _ID(x.id) || (Date.now().toString(36)+Math.random().toString(36).slice(2,7)); x.note = _STR(x.note,500); });
+  d.offs.forEach(x => { x.id = _ID(x.id) || (Date.now().toString(36)+Math.random().toString(36).slice(2,7)); x.note = _STR(x.note,500);
+    const TM = v => typeof v==='string' && /^\d{2}:\d{2}$/.test(v);
+    if(!(TM(x.t1) && TM(x.t2) && x.t1 < x.t2)){ delete x.t1; delete x.t2; } });
   d.prices = d.prices.filter(x => _DT(x.from) && _NUM(x.pack)!=null && _NUM(x.single)!=null);
   d.cfg = (d.cfg && typeof d.cfg==='object') ? d.cfg : {};
   d.cfg = {cap: Math.max(1,Math.min(12,Math.round(_NUM(d.cfg.cap)||3))), bkEvery: Math.max(5,Math.min(500,Math.round(_NUM(d.cfg.bkEvery)||50))), bkMonday: d.cfg.bkMonday!==false};
@@ -298,7 +307,7 @@ function showDlg(){
   d.innerHTML = `<div class="modal" style="z-index:40;align-items:center;padding:20px"><div class="sheet" style="border-radius:16px;max-width:420px">
     ${dlg.html ? `<div>${dlg.html}</div>` : `<p style="margin:0 0 4px;font-size:16px">${esc(dlg.msg)}</p>`}
     ${dlg.check ? `<label class="chk"><input type="checkbox" id="dlg-chk"><span>${esc(dlg.check)}</span></label>` : ''}
-    ${dlg.opts ? `<div class="dlgopts">${dlg.opts.map((o,i) => `<button class="${o.ok?'ok':''}" data-a="dlgopt" data-i="${i}">${esc(o.label)}</button>`).join('')}</div>`
+    ${dlg.opts ? `<div class="dlgopts">${dlg.opts.map((o,i) => `<button class="${o.ok?'ok':o.cls||''}" data-a="dlgopt" data-i="${i}">${esc(o.label)}</button>`).join('')}</div>`
       : `<div class="btns">${dlg.yes ? '<button data-a="dlgno">Mégse</button><button class="ok" data-a="dlgyes">Igen</button>' : `<button class="ok" data-a="dlgno">${dlg.html ? 'Bezárás' : 'Rendben'}</button>`}</div>`}</div></div>`;
 }
 const archMax = () => addDays(db.calStart || today(), -1);   /* kézzel rögzíthető utolsó nap */
@@ -418,8 +427,8 @@ function planInfo(){
   db.clients.forEach(c => cap.set(c.id, (typeOf(c)==='trial' || c.last) ? remaining(c) : Infinity));
   const val = (c,d) => { const pr = priceAt(d); return !pr ? 0 : typeOf(c)==='trial' ? pr.single : pr.pack/PACK; };
   for(let d=t; d<=end; d=addDays(d,1)){
-    const dw = dowOf(d), off = !!offOn(d);
-    db.slots.filter(sl => sl.dow===dw).sort((a,b) => a.time.localeCompare(b.time)).forEach(sl => {
+    slotsOn(d).sort((a,b) => a.time.localeCompare(b.time)).forEach(sl => {
+      const off = !!offAt(sl,d);
       attendees(sl,d).forEach(a => {
         if(a.skipped) return;
         const c = db.clients.find(x => x.id===a.clientId);
@@ -436,10 +445,8 @@ function planInfo(){
 function unmarkedPast(ym){
   const t = today(); let n = 0;
   for(let d=ym+'-01'; d.startsWith(ym) && d<t; d=addDays(d,1)){
-    if(offOn(d)) continue;
-    const dw = dowOf(d);
-    db.slots.filter(sl => sl.dow===dw).forEach(sl => attendees(sl,d).forEach(a => {
-      if(a.skipped) return;
+    slotsOn(d).forEach(sl => attendees(sl,d).forEach(a => {
+      if(a.skipped || offAt(sl,d)) return;
       const c = db.clients.find(x => x.id===a.clientId);
       if(!doneOf(c, sessKey(sl.id,a.clientId,d), d)) n++;
     }));
@@ -464,13 +471,29 @@ function monthRevenue(ym){
   const om = P.offMissed.filter(x => x.date.startsWith(ym));
   return {per:[...per.values()], realV, realN, planV, planN, lostV, lostN, offN:om.length, offV:om.reduce((a,x) => a+x.value,0), unmarked:unmarkedPast(ym)};
 }
-const offOn = date => db.offs.find(o => o.from<=date && date<=o.to) || null;
+const toMin = t => +t.slice(0,2)*60 + +t.slice(3,5);
+/* időpont élettartama: from–to (zárolt múlt), no = törölt egyes napok */
+const live = (sl,date) => (!sl.from || sl.from<=date) && (!sl.to || date<=sl.to) && !(sl.no && sl.no.includes(date));
+const slotsOn = date => db.slots.filter(sl => sl.dow===dowOf(date) && live(sl,date));
+const curSlots = () => db.slots.filter(sl => !sl.to || sl.to>=today());
+const offHits = (o,sl) => !o.t1 || (toMin(sl.time) < toMin(o.t2) && toMin(sl.time)+(sl.dur||60) > toMin(o.t1));
+/* egész napos szabadság az adott napon */
+const offOn = date => db.offs.find(o => !o.t1 && o.from<=date && date<=o.to) || null;
+/* az adott időpontot érintő szabadság (egész napos vagy részleges) */
+const offAt = (sl,date) => db.offs.find(o => o.from<=date && date<=o.to && offHits(o,sl)) || null;
+const offLabel = o => md(o.from)+(o.from!==o.to ? '–'+md(o.to) : '')+(o.t1 ? ' · '+o.t1+'–'+o.t2 : '');
+/* van-e adat az időponton a megadott nap előtt (edzés, lemondás, foglalás, fix tag) */
+function slotHasData(sl, before){
+  const pre = sl.id+'|';
+  return db.clients.some(c => c.sessions.some(x => x.ref && x.ref.startsWith(pre) && x.date<before))
+    || db.extras.some(x => x.slotId===sl.id && x.date<before) || db.skips.some(x => x.slotId===sl.id && x.date<before)
+    || db.members.some(m => m.slotId===sl.id && m.from<before);
+}
 function affected(o){
   let bookings = 0; const names = new Set();
   let d = o.from, guard = 0;
   while(d <= o.to && guard++ < 400){
-    const dw = dowOf(d);
-    db.slots.filter(sl => sl.dow===dw).forEach(sl => attendees(sl,d).filter(a => !a.skipped).forEach(a => { bookings++; names.add(cname(a.clientId)); }));
+    slotsOn(d).filter(sl => offHits(o,sl)).forEach(sl => attendees(sl,d).filter(a => !a.skipped).forEach(a => { bookings++; names.add(cname(a.clientId)); }));
     d = addDays(d,1);
   }
   return {bookings, names:[...names].sort((x,y)=>x.localeCompare(y,'hu'))};
@@ -506,10 +529,10 @@ function legendHtml(){
   return `<b style="font-size:17px">Jelmagyarázat</b><div class="lgs">
     ${L('0/'+capN(),'background:var(--bg);color:var(--mut)','üres')}
     ${L('1/'+capN(),'background:var(--acc2)','van szabad hely')}
-    ${L(capN()+'/'+capN(),'background:var(--acc);color:var(--onacc);border-color:var(--acc)','tele')}
+    ${L(capN()+'/'+capN(),'background:var(--full);color:var(--onfull);border-color:var(--full)','tele')}
     ${L((capN()+1)+'/'+capN(),'background:var(--warnbg);color:var(--warn)','túlfoglalt')}
     ${L('&nbsp;','box-shadow:inset 0 0 0 2.5px var(--acc)','mai nap')}
-    ${L('!','background:var(--redbg);border-color:var(--danger);color:var(--danger)','szabadság / betegség')}
+    ${L('!','background:var(--offbg);border-color:var(--off);color:var(--off)','elmarad (szabadság, betegség)')}
     ${L('✓','','megtartva')}
     ${L('<s>Név</s>','font-weight:400','lemondta')}
     ${L('Név','color:var(--warn)','késői lemondás (elveszett)')}
@@ -606,20 +629,22 @@ const slotLabel = sl => DOWS[sl.dow-1]+' '+sl.time;
 function cleanWait(){
   db.wait = (db.wait||[]).filter(w => { const c = db.clients.find(x => x.id===w.clientId); return c && !c.anon; });
   const ok = id => db.slots.some(sl => sl.id===id);
-  db.wait.forEach(w => { w.fix = w.fix.filter(ok); w.flex = w.flex.filter(ok); });
+  const ok2 = id => ok(id) && db.slots.some(sl => sl.id===id && (!sl.to || sl.to>=today()));
+  db.wait.forEach(w => { w.fix = w.fix.filter(ok2); w.flex = w.flex.filter(ok2); });
   db.wait = db.wait.filter(w => w.fix.length || w.flex.length);
 }
 function waitFor(slot,date){
-  if(date < today() || offOn(date) || (db.calStart && date < db.calStart) || occ(slot,date) >= capN()) return [];
+  if(date < today() || offAt(slot,date) || !live(slot,date) || (db.calStart && date < db.calStart) || occ(slot,date) >= capN()) return [];
   const at = attendees(slot,date);
   return db.wait.filter(w => (w.fix.includes(slot.id) || w.flex.includes(slot.id)) && !at.some(a => a.clientId===w.clientId))
     .sort((a,b) => a.ts.localeCompare(b.ts) || a.id.localeCompare(b.id));
 }
 function otherSameDay(sl,date,cid){
-  return db.slots.filter(x => x.id!==sl.id && x.dow===dowOf(date) && attendees(x,date).some(a => a.clientId===cid && !a.skipped)).map(x => x.time).sort();
+  return slotsOn(date).filter(x => x.id!==sl.id && attendees(x,date).some(a => a.clientId===cid && !a.skipped)).map(x => x.time).sort();
 }
 /* apply=false: csak ellenőriz ({err} vagy {warn}); apply=true: végrehajtja */
 function placeOnce(sl,date,cid,apply){
+  if(!live(sl,date)) return {err:'Ezen a napon ez az időpont nem létezik.'};
   if(db.calStart && date < db.calStart) return {err:`A naptár kezdőnapja ${md(db.calStart)}. Korábbi edzést a vendégadatlapon rögzíts (archív).`};
   const me = attendees(sl,date).find(a => a.clientId===cid);
   if(me) return {err: me.skipped ? `${cname(cid)} ezen az alkalmon már szerepel, de lemondta. Ha mégis jön, használd a „Mégis jön” gombot.` : `${cname(cid)} már be van írva erre az alkalomra.`};
@@ -634,6 +659,8 @@ function placeFix(sl,date,cid,apply){
   const inAt = d => attendees(sl,d).some(a => a.clientId===cid);
   for(let i=0;i<12;i++){
     const d = addDays(date, 7*i);
+    if(sl.to && d > sl.to) break;
+    if(!live(sl,d)) continue;
     if(!inAt(d) && occ(sl,d) >= capN()) return {err:`${md(d)} dátumon már tele van (${capN()}/${capN()}), így nem rakható be fixen. Szabadíts fel helyet, vagy add hozzá csak egyszeri vendégként.`};
   }
   if(!apply){
@@ -732,7 +759,7 @@ function renderClients(hd, app, fab){
       ${anonN ? `<div class="card"><b>Törölt (anonim) vendégek: ${anonN}</b><p class="sub">Az edzéseik és fizetéseik név nélkül megmaradnak, hogy a bevétel ne változzon.</p></div>` : ''}
       <div class="card"><b>Minden adat törlése</b>
       <p class="sub">Véglegesen törli a vendégeket, a naptárat, az árakat, a várólistát és a szabadságokat. A beállítások megmaradnak. Előbb készíts mentést.</p>
-      <button class="big" style="background:var(--danger)" data-a="wipe">Minden adat törlése</button></div>
+      <button class="big" style="background:var(--card);color:var(--danger);border:1.5px solid var(--danger)" data-a="wipe">Minden adat törlése</button></div>
       <div class="sub" style="text-align:center;margin:18px 0">MRKteam app · verzió ${VERSION}</div>`;
     document.getElementById('imp').onchange = importFile;
     document.getElementById('cfg-mon').onchange = e => { db.cfg.bkMonday = !!e.target.checked; save(); };
@@ -781,10 +808,12 @@ function renderCal(hd, app, fab){
   const t = today();
   hd.innerHTML = `<button class="icon" data-a="wk" data-n="-1">‹</button><h1 style="text-align:center;font-size:14px">${md(calWeek)}–${md(addDays(calWeek,6))}</h1>
     <button class="icon" data-a="wk" data-n="0">Ma</button><button class="icon" data-a="wk" data-n="1">›</button>`;
-  const times = [...new Set(db.slots.map(s => s.time))].sort();
+  const wkDays = [0,1,2,3,4,5,6].map(i => addDays(calWeek,i));
+  const wkSlots = db.slots.filter(s => wkDays.some(d => s.dow===dowOf(d) && live(s,d)));
+  const times = [...new Set(wkSlots.map(s => s.time))].sort();
   const wkEnd = addDays(calWeek,6);
   const banners = db.offs.filter(o => o.from<=wkEnd && o.to>=calWeek).sort((a,b) => a.from.localeCompare(b.from)).map(o =>
-    `<button class="offb" data-a="editoff" data-id="${o.id}"><span class="grow">${md(o.from)}${o.from!==o.to ? '–'+md(o.to) : ''} · ${esc(o.note || 'nincs edzés')}</span><span>${affected(o).bookings} foglalás ›</span></button>`).join('');
+    `<button class="offb" data-a="editoff" data-id="${o.id}"><span class="grow">${offLabel(o)} · ${esc(o.note || 'nincs edzés')}</span><span>${affected(o).bookings} foglalás ›</span></button>`).join('');
   let h = `<div class="offbar"><button class="mini" data-a="newoff">+ Szabadság / betegség</button><button class="ibtn" data-a="calinfo" aria-label="Jelmagyarázat">i</button></div>${banners}`;
   if(!times.length){
     h += `<div class="empty">Még nincs időpont.<br>Add hozzá lent az elsőket.</div>`;
@@ -795,11 +824,11 @@ function renderCal(hd, app, fab){
       h += `<div class="cg-h ${date===t?'today':''} ${offOn(date)?'off':''}"><b>${DOWS[i]}</b><span>${+date.slice(8,10)}</span></div>`;
     }
     times.forEach(tm => {
-      const ends = [...new Set(db.slots.filter(s => s.time===tm).map(endTime))];
+      const ends = [...new Set(wkSlots.filter(s => s.time===tm).map(endTime))];
       h += `<div class="cg-t"><b>${tm}</b>${ends.length===1 ? `<span>${ends[0]}</span>` : ''}</div>`;
       for(let i=0;i<7;i++){
         const date = addDays(calWeek,i);
-        const s = db.slots.find(x => x.dow===i+1 && x.time===tm);
+        const s = db.slots.find(x => x.dow===i+1 && x.time===tm && live(x,date));
         if(!s){ h += `<div class="cg-e"></div>`; continue; }
         const at = attendees(s,date), n = at.filter(a => !a.skipped).length;
         const cls = n>capN() ? 'over' : n===capN() ? 'full' : n===0 ? 'zero' : 'some';
@@ -812,7 +841,7 @@ function renderCal(hd, app, fab){
           if(a.skipped) nm = `<s>${nm}</s>`;
           return `<span class="n ${late?'lost':''}">${done?'✓':''}${nm}</span>`;
         }).join('');
-        h += `<button class="cg-c ${cls} ${date===t?'tdy':''} ${offOn(date)?'off':''}" data-a="slot" data-s="${s.id}" data-d="${date}"><i class="cnt">${n}/${capN()}</i>${names}${waitFor(s,date).length ? `<b class="vb" title="várólista">V${waitFor(s,date).length}</b>` : ''}</button>`;
+        h += `<button class="cg-c ${cls} ${date===t?'tdy':''} ${offAt(s,date)?'off':''}" data-a="slot" data-s="${s.id}" data-d="${date}"><i class="cnt">${n}/${capN()}</i>${names}${waitFor(s,date).length ? `<b class="vb" title="várólista">V${waitFor(s,date).length}</b>` : ''}</button>`;
       }
     });
     h += `</div>`;
@@ -857,20 +886,40 @@ function backupWarn(){
   return `<div class="warn">${bkMsg(r)} <button data-a="export" style="margin-left:6px">Mentés most</button></div>`;
 }
 
+let wSel = null;   /* súlydiagramon kiválasztott pont */
+function niceStep(rg){ for(const st of [0.5,1,2,5,10,20,50]) if(rg/st <= 5) return st; return 100; }
 function weightChart(ss){
   const pts = ss.filter(s => s.weight!=null).map(s => ({d:s.date, w:s.weight}));
   if(pts.length < 2) return pts.length===1 ? secCard('w', 'Testsúly', `<b>${String(pts[0].w).replace('.',',')} kg</b>`, `<span class="sub">Egy mérés: ${md(pts[0].d)}</span>`, true) : '';
-  const W=320,H=110,p=8;
-  const ws = pts.map(x=>x.w), mn = Math.min(...ws), mx = Math.max(...ws), rg = (mx-mn)||1;
-  const t0 = new Date(pts[0].d).getTime(), t1 = new Date(pts[pts.length-1].d).getTime(), tr = (t1-t0)||1;
-  const X = d => p + (new Date(d).getTime()-t0)/tr*(W-2*p);
-  const Y = w => H-p - (w-mn)/rg*(H-2*p);
+  const W=330, H=190, L=34, Rm=10, T=12, B=36, pw=W-L-Rm, ph=H-T-B;
+  const ws = pts.map(x=>x.w), mn = Math.min(...ws), mx = Math.max(...ws);
+  const st = niceStep(Math.max(mx-mn, 1)); let lo = Math.floor(mn/st)*st, hi = Math.ceil(mx/st)*st; if(hi===lo){ lo -= st; hi += st; }
+  const ms = d => parse(d).getTime(), t0 = ms(pts[0].d), t1 = ms(pts[pts.length-1].d), tr = (t1-t0)||1;
+  const X = d => L + (ms(d)-t0)/tr*pw, Y = w => T + (hi-w)/(hi-lo)*ph;
+  const kg = v => (Math.round(v*10)/10).toString().replace('.',',');
+  let g = '';
+  for(let v=lo; v<=hi+1e-9; v+=st){ const y = Y(v).toFixed(1); g += `<line class="gl" x1="${L}" x2="${W-Rm}" y1="${y}" y2="${y}"/><text x="${L-5}" y="${(+y+3.5).toFixed(1)}" text-anchor="end">${kg(v)}</text>`; }
+  g += `<line class="gl" x1="${L}" x2="${L}" y1="${T}" y2="${T+ph}"/>`;
+  /* évváltások */
+  const y0 = +pts[0].d.slice(0,4), y1 = +pts[pts.length-1].d.slice(0,4), segs = [];
+  for(let y=y0; y<=y1; y++){ const a = y===y0 ? L : X(y+'-01-01'), b = y===y1 ? W-Rm : X((y+1)+'-01-01'); segs.push({y,a,b}); if(y>y0) g += `<line class="yl" x1="${a.toFixed(1)}" x2="${a.toFixed(1)}" y1="${T}" y2="${T+ph+30}"/>`; }
+  /* dátumfeliratok: csak annyi, amennyi kifér (min. 40 px) */
+  const lab = []; pts.forEach((p,i) => { const x = X(p.d); if(!lab.length || x - X(pts[lab[lab.length-1]].d) >= 40) lab.push(i); });
+  const li = pts.length-1; if(lab[lab.length-1]!==li){ if(X(pts[li].d) - X(pts[lab[lab.length-1]].d) < 40 && lab.length>1) lab.pop(); lab.push(li); }
+  segs.forEach(sg => { if(sg.b - sg.a >= 26) g += `<text x="${((sg.a+sg.b)/2).toFixed(1)}" y="${T+ph+14}" text-anchor="middle" style="font-weight:700">${sg.y}</text>`; });
+  lab.forEach(i => { const x = X(pts[i].d); g += `<text x="${x.toFixed(1)}" y="${T+ph+28}" text-anchor="${i===0?'start':i===li?'end':'middle'}">${pts[i].d.slice(5,7)}.${pts[i].d.slice(8,10)}</text>`; });
   const line = pts.map(x => X(x.d).toFixed(1)+','+Y(x.w).toFixed(1)).join(' ');
-  const dots = pts.map(x => `<circle cx="${X(x.d).toFixed(1)}" cy="${Y(x.w).toFixed(1)}" r="3.5" fill="var(--acc)"/>`).join('');
+  const dots = pts.map((x,i) => `<circle cx="${X(x.d).toFixed(1)}" cy="${Y(x.w).toFixed(1)}" r="${wSel===i?5:3.5}" style="fill:var(--acc)"/>`).join('');
+  const hits = pts.map((x,i) => `<circle class="hit" data-a="wpt" data-i="${i}" cx="${X(x.d).toFixed(1)}" cy="${Y(x.w).toFixed(1)}" r="12"/>`).join('');
+  let tip = '';
+  if(wSel!=null && pts[wSel]){
+    const p = pts[wSel], txt = `${md(p.d)} · ${kg(p.w)} kg`, tw = txt.length*6.3+14, px = X(p.d), py = Y(p.w);
+    const bx = Math.max(2, Math.min(W-tw-2, px-tw/2)), by = py-34 < 0 ? py+10 : py-34;
+    tip = `<g class="tip" data-a="wpt" data-i="${wSel}"><rect x="${bx.toFixed(1)}" y="${by.toFixed(1)}" width="${tw.toFixed(1)}" height="24" rx="6"/><text x="${(bx+tw/2).toFixed(1)}" y="${(by+16).toFixed(1)}" text-anchor="middle">${txt}</text></g>`;
+  }
   const f = pts[0].w, l = pts[pts.length-1].w, diff = Math.round((l-f)*10)/10;
-  return secCard('w', 'Testsúly', `<b>${String(l).replace('.',',')} kg</b>`, `<div class="sub">${diff>0?'+':''}${String(diff).replace('.',',')} kg az első mérés óta</div>
-    <svg viewBox="0 0 ${W} ${H}"><polyline points="${line}" fill="none" stroke="var(--acc)" stroke-width="2"/>${dots}</svg>
-    <div class="row sub"><span class="grow">${md(pts[0].d)}</span><span>${mn.toString().replace('.',',')}–${mx.toString().replace('.',',')} kg</span><span class="grow" style="text-align:right">${md(pts[pts.length-1].d)}</span></div>`, true);
+  return secCard('w', 'Testsúly', `<b>${String(l).replace('.',',')} kg</b>`, `<div class="sub">${diff>0?'+':''}${String(diff).replace('.',',')} kg az első mérés óta · koppints egy pontra a részletekért</div>
+    <svg class="wch" viewBox="0 0 ${W} ${H}">${g}<polyline points="${line}" fill="none" style="stroke:var(--acc)" stroke-width="2"/>${dots}${hits}${tip}</svg>`, true);
 }
 
 function renderModal(){
@@ -922,9 +971,9 @@ function renderModal0(){
   } else if(ui.type === 'wait'){
     const w = ui.w;
     const cands = activeClients().filter(c => c.id===w.clientId || !db.wait.some(x => x.clientId===c.id)).sort((a,b) => a.name.localeCompare(b.name,'hu'));
-    const days = [...new Set(db.slots.map(sl => sl.dow))].sort((x,y) => x-y), times = [...new Set(db.slots.map(sl => sl.time))].sort();
+    const cs = curSlots(), days = [...new Set(cs.map(sl => sl.dow))].sort((x,y) => x-y), times = [...new Set(cs.map(sl => sl.time))].sort();
     const chips = (key, act) => `<div class="wgrid" style="grid-template-columns:repeat(${days.length},minmax(0,1fr))">${days.map(d => `<div class="wh">${DOWS[d-1]}</div>`).join('')}${times.map(tm => days.map(d => {
-      const sl = db.slots.find(x => x.dow===d && x.time===tm);
+      const sl = cs.filter(x => x.dow===d && x.time===tm).sort((a,b) => (a.to?1:0)-(b.to?1:0))[0];
       return sl ? `<button type="button" class="chip ${w[key].includes(sl.id)?'on':''}" data-a="${act}" data-s="${sl.id}">${tm}</button>` : '<div></div>';
     }).join('')).join('')}</div>`;
     m.innerHTML = `<div class="modal"><div class="sheet"><h2>${ui.id ? 'Várólista szerkesztése' : 'Várólistára'}</h2>
@@ -942,11 +991,13 @@ function renderModal0(){
         <div class="hint">A már rögzített (megtörtént) edzések értéke nem változik. Az új ár csak a tervezett és a későbbi edzésekre vonatkozik.</div>`}
       <div class="btns"><button data-a="close">Mégse</button><button class="ok" data-a="saveprice">Mentés</button></div></div></div>`;
   } else if(ui.type === 'off'){
-    const af = ui.id ? affected({from:ui.from, to:ui.to}) : null;
+    const af = ui.id ? affected({from:ui.from, to:ui.to, t1:ui.part?ui.t1:null, t2:ui.part?ui.t2:null}) : null;
     m.innerHTML = `<div class="modal"><div class="sheet"><h2>${ui.id ? 'Szabadság / betegség szerkesztése' : 'Szabadság / betegség'}</h2>
-      <div class="hint" style="margin:0 0 6px">Ezeken a napokon nem lesz edzés. A foglalásokat az app nem tiltja le, csak pirosan jelzi az érintett napokat.</div>
+      <div class="hint" style="margin:0 0 6px">Ezeken a napokon (vagy órákban) nem lesz edzés. A foglalásokat az app nem törli, csak narancssárgán jelzi az érintett alkalmakat. A bérletből nem vonódik le alkalom, a tervezett bevételből kiesik.</div>
       <label>Kezdete</label>${dateField('f-from',ui.from)}
       <label>Vége (az utolsó nap is beleszámít)</label>${dateField('f-to',ui.to)}
+      <label class="chk"><input type="checkbox" id="f-part" data-a="offpart" ${ui.part ? 'checked' : ''}><span>Nem egész nap</span></label>
+      ${ui.part ? `<div class="row" style="margin-top:8px"><div class="grow"><label style="margin-top:0">Ettől</label><input type="time" id="f-t1" value="${esc(ui.t1||'')}"></div><div class="grow"><label style="margin-top:0">Eddig</label><input type="time" id="f-t2" value="${esc(ui.t2||'')}"></div></div><div class="hint">Minden kiválasztott napon csak az ebbe az idősávba eső időpontok maradnak el.</div>` : ''}
       <label>Megjegyzés</label><input id="f-note" value="${esc(ui.note)}" placeholder="pl. szabadság, beteg" autocomplete="off">
       ${af ? `<div class="card" style="margin-top:12px"><b>Érintett: ${af.bookings} foglalás</b>${af.names.length ? `<div class="sub" style="margin-top:4px">${af.names.map(esc).join(', ')}</div>` : ''}</div>` : ''}
       <div class="btns">${ui.id ? '<button class="del" data-a="deloff">Törlés</button>' : ''}<button data-a="close">Mégse</button><button class="ok" data-a="saveoff">Mentés</button></div></div></div>`;
@@ -962,6 +1013,13 @@ function renderModal0(){
       ${rows}
       <button class="mini" data-a="radd" style="width:100%;margin-top:4px">+ Újabb sor</button>
       <div class="btns"><button data-a="close">Mégse</button><button class="ok" data-a="saveslot">Mentés</button></div></div></div>`;
+  } else if(ui.type === 'editslot'){
+    const s = db.slots.find(x => x.id===ui.slotId);
+    m.innerHTML = `<div class="modal"><div class="sheet"><h2>Időpont módosítása</h2>
+      <div class="sub" style="margin:-6px 0 6px">${DOW[s.dow-1]} · érvényes ${md(ui.date)}-tól</div>
+      <div class="row"><input type="time" id="e-t" value="${s.time}" style="flex:1"><select id="e-d" style="flex:1">${DURS.map(d => `<option value="${d[0]}" ${(s.dur||60)===d[0]?'selected':''}>${d[1]}</option>`).join('')}</select></div>
+      <div class="hint">A módosítás ettől a naptól minden hétre érvényes. A korábbi napok (edzések, lemondások) változatlanok maradnak. A fix vendégek és a várólista átkerülnek.</div>
+      <div class="btns"><button data-a="slot" data-s="${s.id}" data-d="${ui.date}">Mégse</button><button class="ok" data-a="saveeditslot">Mentés</button></div></div></div>`;
   } else if(ui.type === 'slot'){
     const slot = db.slots.find(s => s.id===ui.slotId);
     if(!slot){ ui=null; m.innerHTML=''; return; }
@@ -1017,15 +1075,20 @@ function renderModal0(){
     }).join('') : '';
     m.innerHTML = `<div class="modal"><div class="sheet">
       <div class="row"><h2 class="grow">${DOW[slot.dow-1]} ${md(date)} · ${slot.time}–${endTime(slot)}</h2>${baseOcc(slot,date)!==n ? `<span class="sub">alap ${baseOcc(slot,date)}/${capN()}</span>` : ''}${occPill(n)}</div>
-      ${offOn(date) ? `<div class="warn offw">Ezen a napon nem lesz edzés: ${esc(offOn(date).note || 'szabadság / betegség')}</div>` : ''}
+      ${offAt(slot,date) ? `<div class="warn offw">Ez az alkalom elmarad: ${esc(offAt(slot,date).note || 'szabadság / betegség')}${offAt(slot,date).t1 ? ' ('+offAt(slot,date).t1+'–'+offAt(slot,date).t2+')' : ''}</div>` : ''}
       ${rows || '<div class="empty" style="padding:16px">Üres időpont.</div>'}
       ${waitBox}
       ${addBox}
-      <div class="btns"><button class="del" data-a="delslot">Időpont törlése</button><button class="ok" data-a="close">Bezárás</button></div>
+      <div class="btns"><button class="del" data-a="delslot">Időpont törlése</button>${date>=today() ? '<button data-a="editslot">Módosítás</button>' : ''}<button class="ok" data-a="close">Bezárás</button></div>
     </div></div>`;
   }
 }
 
+function readOffForm(){
+  const g = id => document.getElementById(id);
+  if(g('f-from')) ui.from = g('f-from').value; if(g('f-to')) ui.to = g('f-to').value; if(g('f-note')) ui.note = g('f-note').value;
+  if(g('f-t1')) ui.t1 = g('f-t1').value; if(g('f-t2')) ui.t2 = g('f-t2').value;
+}
 function readRows(){
   ui.rows.forEach((r,i) => {
     const t = document.getElementById('r-t-'+i), d = document.getElementById('r-d-'+i);
@@ -1047,7 +1110,9 @@ function removeClientData(id){
 }
 
 document.addEventListener('click', e => {
-  const b = e.target.closest('[data-a]'); if(!b) return;
+  const b = e.target.closest('[data-a]');
+  if(wSel!=null && (!b || b.dataset.a!=='wpt')){ wSel = null; if(!b){ render(); return; } }
+  if(!b) return;
   const a = b.dataset.a, id = b.dataset.id, cid = b.dataset.c;
   if(a==='dlgyes'){ const f = dlg && dlg.yes; const late = dlg && dlg.check ? !!document.getElementById('dlg-chk').checked : undefined; dlg = null; showDlg(); if(f) f(late); return; }
   if(a==='dlgno'){ dlg = null; showDlg(); return; }
@@ -1063,7 +1128,8 @@ document.addEventListener('click', e => {
   if(a==='tab'){ tab=b.dataset.t; ui=null; render(); window.scrollTo(0,0); }
   else if(a==='settings'){ view='settings'; render(); window.scrollTo(0,0); }
   else if(a==='back'){ view='list'; openSec={}; render(); window.scrollTo(0,0); }
-  else if(a==='open'){ view=id; openSec={}; render(); window.scrollTo(0,0); }
+  else if(a==='open'){ view=id; openSec={}; wSel=null; render(); window.scrollTo(0,0); }
+  else if(a==='wpt'){ const i = +b.dataset.i; wSel = wSel===i ? null : i; render(); }
   else if(a==='sec'){ const k = b.dataset.k; openSec[k] = !secOpen(k, b.dataset.def==='1'); render(); }
   else if(a==='newclient'){ ui={type:'client',name:'',phone:'',ctype:'pack',last:false,strength:null}; render(); }
   else if(a==='editclient'){ const c=db.clients.find(x=>x.id===id); ui={type:'client',id,name:c.name,phone:c.phone||'',ctype:typeOf(c),last:!!c.last,strength:c.strength||null}; render(); }
@@ -1136,8 +1202,8 @@ document.addEventListener('click', e => {
     if(!filled.length) return note('Adj meg legalább egy kezdési időt és egy napot.');
     let add = 0, skip = 0;
     filled.forEach(r => r.days.forEach(dow => {
-      if(db.slots.some(s => s.dow===dow && s.time===r.time)) skip++;
-      else { db.slots.push({id:uid(), dow, time:r.time, dur:r.dur}); add++; }
+      if(db.slots.some(s => s.dow===dow && s.time===r.time && (!s.to || s.to>=today()))) skip++;
+      else { db.slots.push({id:uid(), dow, time:r.time, dur:r.dur, ...(db.calStart && db.calStart<today() ? {from:today()} : {})}); add++; }
     }));
     if(add && !db.calStart) db.calStart = today();
     save(); ui=null; render();
@@ -1169,20 +1235,23 @@ document.addEventListener('click', e => {
     db.prices.sort((x,y) => x.from.localeCompare(y.from));
     save(); ui=null; render();
   }
-  else if(a==='newoff'){ ui={type:'off', from:today(), to:today(), note:''}; render(); }
-  else if(a==='editoff'){ const o=db.offs.find(x=>x.id===id); ui={type:'off', id, from:o.from, to:o.to, note:o.note||''}; render(); }
+  else if(a==='newoff'){ ui={type:'off', from:today(), to:today(), note:'', part:false, t1:'', t2:''}; render(); }
+  else if(a==='editoff'){ const o=db.offs.find(x=>x.id===id); ui={type:'off', id, from:o.from, to:o.to, note:o.note||'', part:!!o.t1, t1:o.t1||'', t2:o.t2||''}; render(); }
+  else if(a==='offpart'){ readOffForm(); ui.part = !!b.checked; renderModal(); }
   else if(a==='saveoff'){
-    const from = document.getElementById('f-from').value, to = document.getElementById('f-to').value, nt = document.getElementById('f-note').value.trim();
+    readOffForm(); const {from, to} = ui, nt = ui.note.trim();
     if(!from || !to) return note('Add meg a kezdő és a záró dátumot.');
     if(to < from) return note('A vége nem lehet korábbi, mint a kezdete.');
-    if(ui.id){ const o = db.offs.find(x=>x.id===ui.id); o.from=from; o.to=to; o.note=nt; }
-    else db.offs.push({id:uid(), from, to, note:nt});
+    if(ui.part && (!ui.t1 || !ui.t2 || ui.t1 >= ui.t2)) return note('Add meg az idősávot: a kezdete legyen korábbi, mint a vége.');
+    const tt = ui.part ? {t1:ui.t1, t2:ui.t2} : {};
+    if(ui.id){ const o = db.offs.find(x=>x.id===ui.id); o.from=from; o.to=to; o.note=nt; delete o.t1; delete o.t2; Object.assign(o, tt); }
+    else db.offs.push({id:uid(), from, to, note:nt, ...tt});
     save(); ui=null; render();
     ask('Szabadság mentve. Készítesz most biztonsági mentést?', () => exportFile());
   }
   else if(a==='deloff'){
     const oid = ui.id;
-    ask('Törlöd ezt a szabadság / betegség bejegyzést? A foglalásokhoz nem nyúl, csak a piros jelölés tűnik el.', () => { db.offs = db.offs.filter(x=>x.id!==oid); save(); ui=null; render(); });
+    ask('Törlöd ezt a szabadság / betegség bejegyzést? A foglalásokhoz nem nyúl, csak a jelölés tűnik el, és az alkalmak újra megtartottnak jelölhetők.', () => { db.offs = db.offs.filter(x=>x.id!==oid); save(); ui=null; render(); });
   }
   else if(a==='slot'){ ui={type:'slot', slotId:b.dataset.s, date:b.dataset.d}; render(); }
   else if(a==='calinfo'){ info(legendHtml()); }
@@ -1232,21 +1301,74 @@ document.addEventListener('click', e => {
     tryPlace(fix ? 'fix' : 'once', s, ui.date, w.clientId, () => {
       const e = db.wait.find(x => x.id===wid); if(!e) return;
       const others = [...e.fix, ...e.flex].filter(x => x!==s.id).length;
-      if(!fix) return choose(`${nm} bekerült erre az alkalomra (${md(ui.date)}). Mi legyen a várólistás bejegyzésével?`, [{label:'Marad a várólistán', ok:true}, {label:'Kiveszem a várólistáról', f:drop}]);
-      choose(`${nm} fixen bekerült: ${slotLabel(s)}. Mi legyen a várólistás bejegyzésével?`, others
-        ? [{label:'Csak ezt az időpontot veszem le', ok:true, f:() => { e.fix = e.fix.filter(x => x!==s.id); e.flex = e.flex.filter(x => x!==s.id); save(); render(); }}, {label:'A teljes bejegyzést törlöm', f:drop}, {label:'Marad, ahogy van'}]
-        : [{label:'Kiveszem a várólistáról', ok:true, f:drop}, {label:'Marad, ahogy van'}]);
+      const only = {label:'Csak ezt az időpontot veszem le', f:() => { e.fix = e.fix.filter(x => x!==s.id); e.flex = e.flex.filter(x => x!==s.id); save(); render(); }};
+      if(!fix) return choose(`${nm} bekerült erre az alkalomra (${md(ui.date)}). Mi legyen a várólistás bejegyzésével?`, others
+        ? [{label:'Marad a várólistán', ok:true}, only, {label:'A teljes bejegyzést törlöm', f:drop}]
+        : [{label:'Marad a várólistán', ok:true}, {label:'Kiveszem a várólistáról', f:drop}]);
+      if(!others){ drop(); return note(`${nm} fixen bekerült (${slotLabel(s)}), és kikerült a várólistáról, mert ez volt az egyetlen kért időpontja.`); }
+      choose(`${nm} fixen bekerült: ${slotLabel(s)}. Mi legyen a várólistás bejegyzésével?`, [{...only, ok:true}, {label:'A teljes bejegyzést törlöm', f:drop}]);
     });
   }
   else if(a==='delslot'){
     const s = slot(); if(!s) return;
-    ask(`Törlöd a(z) ${DOW[s.dow-1]} ${s.time}–${endTime(s)} időpontot a fix vendégeivel együtt? (A rögzített edzések megmaradnak.)`, () => {
-      db.slots = db.slots.filter(x=>x.id!==s.id);
-      db.members = db.members.filter(x=>x.slotId!==s.id);
-      db.skips = db.skips.filter(x=>x.slotId!==s.id);
-      db.extras = db.extras.filter(x=>x.slotId!==s.id);
+    const date = ui.date, lab = `${DOW[s.dow-1]} ${s.time}–${endTime(s)}`, hasPast = slotHasData(s, date);
+    const onlyThis = () => {
+      if(hasPast){
+        if(!offAt(s,date)) db.offs.push({id:uid(), from:date, to:date, t1:s.time, t2:endTime(s), note:'elmarad'});
+        save(); render();
+        note(`A ${md(date)} ${s.time} alkalom elmarad. A Szabadság / betegség sávban látszik, onnan visszavonható. A bérletből nem vonódik le, a tervezett bevételből kiesik.`);
+      } else {
+        s.no = [...new Set([...(s.no||[]), date])];
+        db.extras = db.extras.filter(x => !(x.slotId===s.id && x.date===date));
+        db.skips = db.skips.filter(x => !(x.slotId===s.id && x.date===date));
+        save(); ui=null; render();
+      }
+    };
+    const fromHere = () => {
+      if(db.clients.some(c => c.sessions.some(x => x.ref && x.ref.startsWith(s.id+'|') && x.date>=date && !x.lost)))
+        return note(`Ezen a napon vagy később már van megtartottnak jelölt edzés ezen az időponton. Előbb vond vissza, vagy a következő naptól töröld.`);
+      if(!hasPast){
+        db.slots = db.slots.filter(x=>x.id!==s.id);
+        db.members = db.members.filter(x=>x.slotId!==s.id);
+        db.skips = db.skips.filter(x=>x.slotId!==s.id);
+        db.extras = db.extras.filter(x=>x.slotId!==s.id);
+      } else {
+        const prev = addDays(date,-1);
+        s.to = prev; if(s.no){ s.no = s.no.filter(d => d<=prev); if(!s.no.length) delete s.no; }
+        db.members = db.members.filter(m => !(m.slotId===s.id && m.from>=date));
+        db.members.forEach(m => { if(m.slotId===s.id && (!m.to || m.to>prev)) m.to = prev; });
+        db.skips = db.skips.filter(x => !(x.slotId===s.id && x.date>=date));
+        db.extras = db.extras.filter(x => !(x.slotId===s.id && x.date>=date));
+        db.clients.forEach(c => { c.sessions = c.sessions.filter(x => !(x.ref && x.ref.startsWith(s.id+'|') && x.date>=date && x.lost)); });
+      }
       save(); ui=null; render();
+    };
+    if(date < today()) return choose(`${lab}, ${md(date)}. Múltbeli napon csak ez az egy alkalom vonható vissza; a korábbi adatok zároltak.`, [{label:'Csak ezt az alkalmat', ok:true, f:onlyThis}, {label:'Mégse'}]);
+    choose(`${lab} törlése. Csak ezt az alkalmat (${md(date)}), vagy ettől a naptól az összeset, a foglalásokkal együtt? A korábbi napok és edzések megmaradnak.`,
+      [{label:'Csak ezt az alkalmat', f:onlyThis}, {label:'Ettől a naptól az összeset', cls:'del', f:() => ask(`Biztosan törlöd ${md(date)}-tól az összes ${lab} alkalmat, a fix vendégekkel és foglalásokkal együtt?`, fromHere)}, {label:'Mégse', ok:true}]);
+  }
+  else if(a==='editslot'){ const s = slot(); if(!s) return; ui = {type:'editslot', slotId:s.id, date:ui.date, time:s.time, dur:s.dur||60}; render(); }
+  else if(a==='saveeditslot'){
+    const s = db.slots.find(x => x.id===ui.slotId); if(!s) return;
+    const time = document.getElementById('e-t').value, dur = +document.getElementById('e-d').value, D = ui.date;
+    if(!/^\d{2}:\d{2}$/.test(time)) return note('Adj meg kezdési időt.');
+    if(time===s.time && dur===(s.dur||60)){ ui = {type:'slot', slotId:s.id, date:D}; return render(); }
+    if(time!==s.time && db.slots.some(x => x.id!==s.id && x.dow===s.dow && x.time===time && (!x.to || x.to>=D)))
+      return note(`${DOW[s.dow-1]} ${time} időpont már létezik.`);
+    if(!slotHasData(s, D)){ s.time = time; s.dur = dur; save(); ui = {type:'slot', slotId:s.id, date:D}; return render(); }
+    /* zárolás: a régi időpont D előtti napon lezárul, D-től új indul, a fix vendégek, foglalások, várólista átkerülnek */
+    const ns = {id:uid(), dow:s.dow, time, dur, from:D, ...(s.to ? {to:s.to} : {})}, prev = addDays(D,-1);
+    if(s.no){ const keep = s.no.filter(d => d<D), mv = s.no.filter(d => d>=D); if(keep.length) s.no = keep; else delete s.no; if(mv.length) ns.no = mv; }
+    s.to = prev; db.slots.push(ns);
+    db.members.filter(m => m.slotId===s.id && (!m.to || m.to>=D)).forEach(m => {
+      if(m.from>=D) m.slotId = ns.id;
+      else { db.members.push({id:uid(), slotId:ns.id, clientId:m.clientId, from:D, to:m.to||null}); m.to = prev; }
     });
+    [db.skips, db.extras].forEach(arr => arr.forEach(x => { if(x.slotId===s.id && x.date>=D) x.slotId = ns.id; }));
+    db.clients.forEach(c => c.sessions.forEach(x => { if(x.ref && x.ref.startsWith(s.id+'|') && x.date>=D) x.ref = ns.id+'|'+c.id+'|'+x.date; }));
+    (db.wait||[]).forEach(w => { w.fix = w.fix.map(x => x===s.id ? ns.id : x); w.flex = w.flex.map(x => x===s.id ? ns.id : x); });
+    save(); ui = {type:'slot', slotId:ns.id, date:D}; render();
+    note(`Módosítva ${md(D)}-tól: ${time}–${endTime(ns)}. A korábbi napok változatlanok maradtak.`);
   }
   else if(a==='done' && ui && ui.date > today()){ note('Jövőbeli alkalmat nem lehet megtartottnak jelölni.'); }
   else if(a==='done'){ ui.done = {cid, tags:[], weight:'', note:''}; render(); }
