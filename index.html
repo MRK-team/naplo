@@ -1,0 +1,1249 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Edzés napló">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#14532d">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; manifest-src 'self'; connect-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<title>Edzés napló</title>
+<style>
+:root{--bg:#f4f5f2;--card:#fff;--ink:#1c1f1a;--mut:#6b7168;--acc:#166534;--acc2:#dcfce7;--warn:#b45309;--warnbg:#fef3c7;--line:#e2e5df;--danger:#b91c1c;--oth:#1d4ed8;--othbg:#dbeafe;--redbg:#fee2e2}
+@media(prefers-color-scheme:dark){:root{--bg:#111310;--card:#1c1f1a;--ink:#eef0ec;--mut:#9aa196;--acc:#4ade80;--acc2:#14301f;--warn:#fbbf24;--warnbg:#3a2e0b;--line:#2c302a;--danger:#f87171;--oth:#93c5fd;--othbg:#172554;--redbg:#3b1212}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 -apple-system,system-ui,sans-serif;padding-bottom:calc(150px + env(safe-area-inset-bottom))}
+header{position:sticky;top:0;background:var(--bg);padding:calc(12px + env(safe-area-inset-top)) 16px 10px;display:flex;align-items:center;gap:10px;z-index:5;border-bottom:1px solid var(--line)}
+header h1{font-size:20px;margin:0;flex:1}
+main{padding:12px 16px;max-width:560px;margin:0 auto}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+.icon{font-size:15px;padding:8px 12px;border-radius:10px;background:var(--card);border:1px solid var(--line)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:10px}
+.row{display:flex;align-items:center;gap:10px}
+.grow{flex:1}
+.client{width:100%;text-align:left;display:block}
+.client b{font-size:17px}
+.sub{color:var(--mut);font-size:14px}
+.pill{display:inline-block;padding:3px 10px;border-radius:99px;background:var(--acc2);color:var(--acc);font-weight:600;font-size:14px;white-space:nowrap}
+.pill.low{background:var(--warnbg);color:var(--warn)}
+.pill.zero{background:var(--line);color:var(--mut)}
+.pill.full{background:var(--acc);color:#fff}
+@media(prefers-color-scheme:dark){.pill.full{color:#06220f}}
+.big{width:100%;padding:16px;border-radius:14px;background:var(--acc);color:#fff;font-size:18px;font-weight:700}
+@media(prefers-color-scheme:dark){.big{color:#06220f}}
+.fab{position:fixed;left:16px;right:16px;bottom:calc(66px + env(safe-area-inset-bottom));max-width:528px;margin:0 auto}
+.tabs{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);display:flex;padding-bottom:env(safe-area-inset-bottom);z-index:6}
+.tabs button{flex:1;padding:14px 10px;font-weight:700;color:var(--mut)}
+.tabs button.on{color:var(--acc)}
+.grp{margin:16px 0 4px;color:var(--mut);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.sess{width:100%;text-align:left;padding:11px 4px;border-bottom:1px solid var(--line);display:flex;gap:10px;align-items:baseline}
+.sess .d{font-variant-numeric:tabular-nums;font-weight:700;min-width:88px}
+.sess .t{flex:1}
+.sess .w{color:var(--acc);font-weight:700;white-space:nowrap}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:10px 14px;border-radius:99px;border:1px solid var(--line);background:var(--card);font-size:16px}
+.chip.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+@media(prefers-color-scheme:dark){.chip.on{color:#06220f}}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;z-index:20}
+.sheet{background:var(--bg);width:100%;max-height:92vh;overflow:auto;border-radius:20px 20px 0 0;padding:16px 16px calc(20px + env(safe-area-inset-bottom));max-width:560px;margin:0 auto}
+.sheet h2{margin:0 0 12px;font-size:19px}
+label{display:block;font-size:13px;color:var(--mut);margin:12px 0 6px;font-weight:600}
+input,textarea,select{width:100%;font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px}
+.btns{display:flex;gap:10px;margin-top:16px}
+.btns button{flex:1;padding:14px;border-radius:12px;font-weight:700;border:1px solid var(--line);background:var(--card)}
+.btns .ok{background:var(--acc);color:#fff;border-color:var(--acc)}
+@media(prefers-color-scheme:dark){.btns .ok{color:#06220f}}
+.btns .del{color:var(--danger);flex:0 0 auto}
+.warn{background:var(--warnbg);color:var(--warn);border-radius:12px;padding:12px;margin-bottom:12px;font-size:14px}
+.empty{text-align:center;color:var(--mut);padding:40px 10px}
+svg{width:100%;height:auto;display:block}
+.day{margin:18px 0 6px;font-weight:700}
+.day.today{color:var(--acc)}
+.slotrow{width:100%;text-align:left;display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:6px}
+.slotrow .tm{font-weight:700;font-variant-numeric:tabular-nums;min-width:46px}
+.slotrow .nm{flex:1;font-size:15px}
+.minis{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.mini{padding:9px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);font-size:14px;font-weight:600}
+.mini.ok{background:var(--acc);color:#fff;border-color:var(--acc)}
+@media(prefers-color-scheme:dark){.mini.ok{color:#06220f}}
+.sheet .card{margin-bottom:8px}
+.hint{font-size:13px;color:var(--mut);margin-top:6px}
+.hint.oth{color:var(--oth);font-weight:600}
+.icon:disabled{opacity:.3;cursor:default}
+.bignum{font-size:32px;font-weight:800;margin:4px 0 6px;letter-spacing:-.5px}
+.rrow{display:flex;gap:10px;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--line)}
+.rrow:last-child{border-bottom:0}
+.offbar{margin-bottom:10px}
+.offb{display:flex;width:100%;text-align:left;gap:8px;align-items:center;background:var(--redbg);color:var(--danger);border:1px solid var(--danger);border-radius:10px;padding:10px 12px;margin-bottom:8px;font-size:14px;font-weight:600}
+.offw{background:var(--redbg);color:var(--danger);font-weight:600}
+.cg-h.off b,.cg-h.off span{color:var(--danger)}
+.cg-h.off{box-shadow:inset 0 -3px 0 var(--danger)}
+.cg-c.off{background:var(--redbg);border-color:var(--danger);color:var(--danger)}
+.cg-c.off .cnt{color:var(--danger)}
+.chip.oth{border-color:var(--oth)}
+.chip.oth.on{background:var(--oth);border-color:var(--oth);color:#fff}
+@media(prefers-color-scheme:dark){.chip.oth.on{color:#0b1a33}}
+.sess.other{background:var(--othbg);border-radius:10px;padding-left:10px;padding-right:8px;margin:2px 0;border-bottom:0;box-shadow:inset 4px 0 0 var(--oth)}
+.sess.other .t b{color:var(--oth)}
+.stat .st i.oth{background:var(--oth)}
+.sortbar{display:flex;gap:6px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
+.sortbar .lbl{font-size:13px;color:var(--mut);margin-right:2px}
+.sortbar .chip{padding:7px 12px;font-size:14px}
+.meta{margin-top:3px}
+.sbar{display:inline-flex;align-items:flex-end;gap:2px;height:14px;vertical-align:-2px}
+.sbar i{display:block;width:5px;border-radius:1.5px;background:var(--line)}
+.sbar i:nth-child(1){height:6px}.sbar i:nth-child(2){height:8px}.sbar i:nth-child(3){height:10px}.sbar i:nth-child(4){height:12px}.sbar i:nth-child(5){height:14px}
+.sbar i.on{background:var(--acc)}
+.datebtn{display:block;width:100%;text-align:left;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:inherit}
+.dpgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:8px}
+.dpgrid span{text-align:center;font-size:12px;opacity:.6}
+.dpd{padding:9px 0;border:0;border-radius:8px;background:transparent;color:inherit;font:inherit}
+.dpd.off{opacity:.25}
+:root{--pay:#6d28d9;--paybg:#ede9fe}
+@media (prefers-color-scheme:dark){:root{--pay:#c4b5fd;--paybg:#2e1f55}}
+.pill.pay{background:var(--paybg);color:var(--pay)}
+.tag.payt{border-color:var(--pay);color:var(--pay)}
+.paywarn{background:var(--paybg);color:var(--pay)}
+.payrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;width:100%;text-align:left;padding:9px 0;border-bottom:1px solid var(--line)}
+.payrow:last-child{border-bottom:0}
+.vb{margin-top:2px;font-size:10px;font-weight:800;border:1.5px solid var(--mut);border-radius:6px;padding:0 4px;line-height:13px;color:var(--ink);background:var(--card);font-style:normal}.dpd.sel{background:var(--acc);color:#fff}.dpd.tod{outline:1px solid var(--acc)}
+.dphead{display:flex;align-items:center;justify-content:space-between;gap:8px}.dphead b{font-size:16px}
+.stat{display:flex;align-items:center;gap:10px;margin:6px 0;font-size:14px}
+.stat .sl{width:78px;flex:0 0 78px}
+.stat .st{flex:1;height:10px;background:var(--line);border-radius:5px;overflow:hidden}
+.stat .st i{display:block;height:100%;background:var(--acc);border-radius:5px}
+.stat b{min-width:22px;text-align:right}
+.chk{display:flex;gap:10px;align-items:flex-start;margin:14px 0 0;font-size:15px;color:var(--ink);font-weight:600}
+.chk input{width:22px;height:22px;flex:0 0 22px;margin:0;padding:0}
+.tag{font-size:12px;font-weight:600;color:var(--mut);border:1px solid var(--line);border-radius:99px;padding:1px 8px;vertical-align:middle}
+.sess.lost{background:var(--warnbg);color:var(--warn);border-radius:10px;padding-left:8px;padding-right:8px;margin:2px 0;border-bottom:0}
+.cg-c .n.lost{color:var(--warn);font-weight:700}
+.cg{display:grid;grid-template-columns:38px repeat(7,minmax(0,1fr));gap:3px;align-items:stretch}
+.cg-h{text-align:center;font-size:12px;color:var(--mut);padding:4px 0;display:flex;flex-direction:column;line-height:1.3}
+.cg-h b{font-size:13px;color:var(--ink)}
+.cg-h.today b,.cg-h.today span{color:var(--acc)}
+.cg-t{display:flex;flex-direction:column;justify-content:center;font-size:12px;line-height:1.25}
+.cg-t span{font-size:10px;color:var(--mut)}
+.cg-c{min-height:58px;border-radius:8px;border:1px solid var(--line);background:var(--card);padding:4px 1px;text-align:center;font-size:10.5px;line-height:1.3;overflow:hidden;display:flex;flex-direction:column;align-items:center;gap:1px;min-width:0}
+.cg-c .cnt{font-style:normal;font-weight:800;font-size:12px}
+.cg-c .n{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cg-c.zero{background:var(--bg);color:var(--mut)}
+.cg-c.some{background:var(--acc2)}
+.cg-c.some .cnt{color:var(--acc)}
+.cg-c.full{background:var(--acc);color:#fff;border-color:var(--acc)}
+@media(prefers-color-scheme:dark){.cg-c.full{color:#06220f}}
+.cg-c.over{background:var(--warnbg);color:var(--warn)}
+.cg-c.tdy{box-shadow:inset 0 0 0 2px var(--acc)}
+.cg-e{min-height:58px;border-radius:8px;background:var(--line);opacity:.3}
+</style>
+</head>
+<body>
+<header id="hd"></header>
+<main id="app"></main>
+<div id="fabwrap"></div>
+<nav class="tabs" id="tabs"></nav>
+<div id="modal"></div>
+<div id="dlg"></div>
+<div id="dp"></div>
+
+<script>
+const PACK = 10;
+const VERSION = '2.1 · 2026.10.06.';
+const capN = () => (db && db.cfg && db.cfg.cap) || 3;
+const TAGS = ['mell','hát','bicepsz','tricepsz','váll','láb','fenék','has','core','kardió','egyéb'];
+const DOW = ['Hétfő','Kedd','Szerda','Csütörtök','Péntek','Szombat','Vasárnap'];
+const DOWS = ['H','K','Sze','Cs','P','Szo','V'];
+const KEY = 'edzo-naplo-v1';
+let db = load();
+let tab = 'clients';    // 'clients' | 'cal'
+let view = 'list';      // 'list' | 'settings' | client id
+let ui = null;          // modal state
+let revMonth = null;    // a bevétel nézet hónapja (YYYY-MM)
+let payOnly = false;
+let calWeek = null;     // a megjelenített hét hétfője (ISO)
+
+/* külső (importált) adat megtisztítása: azonosítók, dátumok, számok, címkék */
+function sanitize(d){
+  const rid = () => Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+  const _ID = v => String(v ?? '').replace(/[^\w-]/g,'').slice(0,40);
+  const _DT = v => typeof v==='string' && /^\d{4}-\d{2}-\d{2}$/.test(v);
+  const _NUM = v => (typeof v==='number' && isFinite(v)) ? v : null;
+  const _STR = (v,n) => String(v ?? '').slice(0,n);
+  const arr = k => { d[k] = Array.isArray(d[k]) ? d[k].filter(x => x && typeof x==='object') : []; };
+  ['clients','slots','members','skips','extras','offs','prices'].forEach(arr);
+  d.clients = d.clients.filter(c => _ID(c.id));
+  d.clients.forEach(c => {
+    c.id = _ID(c.id); c.name = _STR(c.name,100);
+    c.type = ['pack','trial','few'].includes(c.type) ? c.type : 'pack';
+    ['size','lastEnd'].forEach(k => { if(c[k]!=null){ const n = _NUM(c[k]); if(n==null) delete c[k]; else c[k] = Math.max(0,Math.min(1000,Math.round(n))); } });
+    if(c.strength!=null){ const n = Math.round(_NUM(c.strength)||0); if(n>=1&&n<=5) c.strength=n; else delete c.strength; }
+    c.last = !!c.last;
+    c.sessions = (Array.isArray(c.sessions) ? c.sessions : []).filter(x => x && typeof x==='object' && _DT(x.date));
+    c.sessions.forEach(x => {
+      x.id = _ID(x.id) || (Date.now().toString(36)+Math.random().toString(36).slice(2,7)); if(x.ref!=null) x.ref = _ID(x.ref);
+      x.tags = (Array.isArray(x.tags) ? x.tags : []).filter(t => TAGS.includes(t));
+      x.weight = _NUM(x.weight); x.note = _STR(x.note,2000);
+      if(x.val!=null){ x.val = _NUM(x.val); if(x.val==null) delete x.val; }
+    });
+  });
+  d.slots = d.slots.filter(x => _ID(x.id) && /^\d{2}:\d{2}$/.test(x.time) && x.dow>=1 && x.dow<=7);
+  d.slots.forEach(x => { x.id=_ID(x.id); x.dow=Math.round(x.dow); x.dur=_NUM(x.dur)||60; });
+  d.members = d.members.filter(x => _ID(x.id) && _ID(x.slotId) && _ID(x.clientId) && _DT(x.from) && (x.to==null || _DT(x.to)));
+  d.members.forEach(x => { x.id=_ID(x.id); x.slotId=_ID(x.slotId); x.clientId=_ID(x.clientId); });
+  [d.skips,d.extras].forEach((a,i) => { const k = i?'extras':'skips'; d[k] = a.filter(x => _ID(x.slotId) && _ID(x.clientId) && _DT(x.date)); d[k].forEach(x => { x.slotId=_ID(x.slotId); x.clientId=_ID(x.clientId); if(x.id!=null) x.id=_ID(x.id); }); });
+  d.offs = d.offs.filter(x => _DT(x.from) && _DT(x.to));
+  d.offs.forEach(x => { x.id = _ID(x.id) || (Date.now().toString(36)+Math.random().toString(36).slice(2,7)); x.note = _STR(x.note,500); });
+  d.prices = d.prices.filter(x => _DT(x.from) && _NUM(x.pack)!=null && _NUM(x.single)!=null);
+  d.cfg = (d.cfg && typeof d.cfg==='object') ? d.cfg : {};
+  d.cfg = {cap: Math.max(1,Math.min(12,Math.round(_NUM(d.cfg.cap)||3))), bkEvery: Math.max(5,Math.min(500,Math.round(_NUM(d.cfg.bkEvery)||50))), bkMonday: d.cfg.bkMonday!==false};
+  const METH = ['atutalas','keszpenz'];
+  d.clients.forEach(c => {
+    c.phone = _STR(c.phone,30).replace(/[^\d+\-()\/. ]/g,'').trim(); if(!c.phone) delete c.phone;
+    if(c.anon) c.anon = true; else delete c.anon;
+    c.pays = (Array.isArray(c.pays) ? c.pays : []).filter(p => p && typeof p==='object' && _DT(p.date) && Number.isInteger(p.pack) && p.pack>=0 && p.pack<1000 && METH.includes(p.method)).map(p => ({id:_ID(p.id)||rid(), pack:p.pack, date:p.date, method:p.method}));
+    c.sessions.forEach(x => { if(x.paid && typeof x.paid==='object' && _DT(x.paid.date) && METH.includes(x.paid.method)) x.paid = {date:x.paid.date, method:x.paid.method}; else delete x.paid; });
+  });
+  const _ids = a => (Array.isArray(a) ? a : []).map(_ID).filter(x => x && d.slots.some(sl => sl.id===x));
+  d.wait = (Array.isArray(d.wait) ? d.wait : []).filter(w => w && typeof w==='object' && _ID(w.clientId))
+    .map(w => ({id:_ID(w.id)||rid(), clientId:_ID(w.clientId), fix:_ids(w.fix), flex:_ids(w.flex), note:_STR(w.note,300), ts:_DT(w.ts) ? w.ts : '2026-01-01'}))
+    .filter(w => d.clients.some(c => c.id===w.clientId && !c.anon) && (w.fix.length || w.flex.length));
+  d.calStart = _DT(d.calStart) ? d.calStart : null;
+  d.lastExport = _NUM(d.lastExport); d.bkSess = Math.max(0, Math.round(_NUM(d.bkSess)||0));
+  if(d.sort && typeof d.sort==='object'){ d.sort = {by:_STR(d.sort.by,20), dir: d.sort.dir==='desc'?'desc':'asc'}; } else delete d.sort;
+}
+function normalize(d){
+  d.clients = d.clients || []; d.slots = d.slots || []; d.members = d.members || [];
+  d.skips = d.skips || []; d.extras = d.extras || []; d.offs = d.offs || []; d.prices = d.prices || []; d.v = 2;
+  sanitize(d);
+  if(!d.calStart && d.slots.length){   /* régi adat: a naptár kezdőnapja a legkorábbi naptári dátum */
+    const t = new Date(), td = t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0');
+    const ds = [td, ...d.members.map(x=>x.from), ...d.extras.map(x=>x.date)];
+    d.clients.forEach(c => c.sessions.forEach(x => { if(x.ref) ds.push(x.date); }));
+    d.calStart = ds.sort()[0];
+  }
+  d.clients.forEach(c => {
+    if(c.type==='few'){ c.type='pack'; c.last=true; c.lastEnd=c.size || 3; }
+    if(c.type==='trial') delete c.size;
+  });
+  return d;
+}
+function load(){
+  try{ const r = localStorage.getItem(KEY); if(r){ const d = JSON.parse(r); if(d && Array.isArray(d.clients)) return normalize(d); } }catch(e){}
+  return normalize({clients:[], lastExport:null});
+}
+function save(){ if(db.wait) cleanWait(); try{ localStorage.setItem(KEY, JSON.stringify(db)); }catch(e){ note('Mentési hiba: a tárhely nem elérhető. Készíts mentést fájlba, és ne zárd be az appot.'); } setTimeout(checkBackup,0); }
+/* biztonsági mentés: esedékes, ha hétfő óta nem volt, vagy 50+ új edzés van az utolsó mentés óta */
+const sessTotal = () => db.clients.reduce((a,c)=>a+c.sessions.length,0);
+const sinceBackup = () => Math.max(0, sessTotal() - (db.bkSess||0));
+function lastMonday(){ const d = new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate() - ((d.getDay()+6)%7)); return d.getTime(); }
+function backupDue(){
+  if(!db.clients.length) return null;
+  if(!db.lastExport) return 'never';
+  if(db.cfg.bkMonday && db.lastExport < lastMonday()) return 'week';
+  if(sinceBackup() >= db.cfg.bkEvery) return 'count';
+  return null;
+}
+const bkMsg = r => r==='count' ? `${sinceBackup()} új edzés van az utolsó mentés óta.` : r==='never' ? 'Még nem volt mentés fájlba.' : 'Ezen a héten még nem volt mentés.';
+let bkAsked = '';
+function checkBackup(){
+  const r = backupDue(); if(!r || dlg || ui) return;
+  const key = today()+'|'+r+'|'+Math.floor(sinceBackup()/db.cfg.bkEvery);
+  if(bkAsked===key) return; bkAsked = key;
+  ask(bkMsg(r)+' Mented most? (Megosztás menü: Mail, Drive vagy Fájlok.)', () => exportFile());
+}
+document.addEventListener('visibilitychange', () => { if(document.visibilityState==='visible') checkBackup(); });
+/* saját párbeszédablak (a böngésző alert/confirm nem megbízható) */
+let dlg = null;
+function showDlg(){
+  const d = document.getElementById('dlg');
+  if(!dlg){ d.innerHTML=''; return; }
+  d.innerHTML = `<div class="modal" style="z-index:40;align-items:center;padding:20px"><div class="sheet" style="border-radius:16px;max-width:420px">
+    <p style="margin:0 0 4px;font-size:16px">${esc(dlg.msg)}</p>
+    ${dlg.check ? `<label class="chk"><input type="checkbox" id="dlg-chk"><span>${esc(dlg.check)}</span></label>` : ''}
+    <div class="btns">${dlg.yes ? '<button data-a="dlgno">Mégse</button><button class="ok" data-a="dlgyes">Igen</button>' : '<button class="ok" data-a="dlgno">Rendben</button>'}</div></div></div>`;
+}
+const archMax = () => addDays(db.calStart || today(), -1);   /* kézzel rögzíthető utolsó nap */
+const dateField = (id,v,max) => `<input type="hidden" id="${id}" value="${v}"><button type="button" class="datebtn" id="${id}-btn" data-a="pickdate" data-for="${id}"${max ? ` data-max="${max}"` : ''}>${v ? md(v) : 'Válassz dátumot'}</button>`;
+let dp = null;
+function renderDp(){
+  const d = document.getElementById('dp');
+  if(!dp){ d.innerHTML=''; return; }
+  const [y,m] = dp.ym.split('-').map(Number);
+  const mx = dp.max || '9999-12-31';
+  const first = new Date(y,m-1,1), off = (first.getDay()+6)%7, n = new Date(y,m,0).getDate(), t = today();
+  let cells = '<span>h</span><span>k</span><span>sze</span><span>cs</span><span>p</span><span>szo</span><span>v</span>'+'<span></span>'.repeat(off);
+  for(let i=1;i<=n;i++){ const ds = dp.ym+'-'+pad(i); cells += ds>mx ? `<button type="button" class="dpd off" disabled>${i}</button>` : `<button type="button" class="dpd${ds===dp.sel?' sel':''}${ds===t?' tod':''}" data-a="dppick" data-d="${ds}">${i}</button>`; }
+  d.innerHTML = `<div class="modal" style="z-index:45;align-items:center;padding:20px"><div class="sheet" style="border-radius:16px;max-width:420px">
+    <div class="dphead"><button data-a="dpnav" data-n="-1">‹</button><b>${y}. ${MONTHS_HU[m-1]}</b><button data-a="dpnav" data-n="1">›</button></div>
+    <div class="dpgrid">${cells}</div>
+    <div class="btns">${t<=mx ? '<button data-a="dptoday">Ma</button>' : ''}<button class="ok" data-a="dpclose">Bezár</button></div></div></div>`;
+}
+const MONTHS_HU = ['január','február','március','április','május','június','július','augusztus','szeptember','október','november','december'];
+function setDate(id,v){
+  const h = document.getElementById(id), b = document.getElementById(id+'-btn');
+  if(h) h.value = v; if(b) b.textContent = md(v);
+  if(id==='f-from'){ const t = document.getElementById('f-to'); if(t && (!t.value || t.value < v)) setDate('f-to',v); }
+}
+function note(msg){ dlg = {msg, yes:null}; showDlg(); }
+function ask(msg, yes, check){ dlg = {msg, yes, check: check || null}; showDlg(); }
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pad = n => String(n).padStart(2,'0');
+const iso = d => d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const today = () => iso(new Date());
+const parse = s => new Date(s+'T12:00:00');
+const addDays = (s,n) => { const d = parse(s); d.setDate(d.getDate()+n); return iso(d); };
+const dowOf = s => { const g = parse(s).getDay(); return g===0 ? 7 : g; };
+const mondayOf = s => addDays(s, 1-dowOf(s));
+const md = s => s.slice(0,4)+'.'+s.slice(5,7)+'.'+s.slice(8,10)+'.';
+const cname = id => { const c = db.clients.find(x=>x.id===id); return c ? c.name : '?'; };
+const sorted = c => [...c.sessions].sort((a,b)=> a.date.localeCompare(b.date) || a.id.localeCompare(b.id));
+const typeOf = c => c.type || 'pack';
+const sizeOf = c => typeOf(c)==='trial' ? 1 : (c.size || PACK);
+const usedSessions = c => typeOf(c)==='trial' ? c.sessions : c.sessions.filter(s => !s.trial);
+const heldCount = c => c.sessions.filter(s => !s.lost).length;
+const lostCount = c => c.sessions.filter(s => s.lost).length;
+function remaining(c){
+  const n = usedSessions(c).length, size = sizeOf(c);
+  if(typeOf(c)==='trial') return Math.max(0, 1-n);
+  if(c.last) return Math.max(0, (c.lastEnd || size) - n);
+  if(n===0) return size;
+  const m = n % size; return m===0 ? 0 : size-m;
+}
+function typeTag(c){ return typeOf(c)==='trial' ? '1 alkalom' : c.last ? 'utolsó bérlet' : ''; }
+const strDots = c => c.strength ? `<span class="sbar" title="${c.strength}/5">`+[1,2,3,4,5].map(i=>`<i class="${i<=c.strength?'on':''}"></i>`).join('')+'</span>' : '';
+function fixDaysText(c){
+  const t = today();
+  const dows = [...new Set(db.members.filter(m => m.clientId===c.id && (!m.to || m.to>=t))
+    .map(m => { const sl = db.slots.find(x => x.id===m.slotId); return sl ? sl.dow : null; }).filter(Boolean))].sort((a,b)=>a-b);
+  return dows.map(d => DOWS[d-1]).join(', ');
+}
+const activeClients = () => db.clients.filter(c => !c.anon);
+function sortedClients(){
+  const so = db.sort || {by:'name', dir:'asc'}, mul = so.dir==='asc' ? 1 : -1;
+  const byName = (a,b) => a.name.localeCompare(b.name,'hu');
+  return [...activeClients()].sort((a,b) => {
+    if(so.by==='sessions'){ const d = heldCount(a)-heldCount(b); if(d) return d*mul; }
+    else if(so.by==='strength'){
+      const x = a.strength||0, y = b.strength||0;
+      if(!x && y) return 1; if(x && !y) return -1;
+      if(x!==y) return (x-y)*mul;
+    } else { const d = byName(a,b); if(d) return d*mul; }
+    return byName(a,b);
+  });
+}
+const cap = k => k.charAt(0).toUpperCase()+k.slice(1);
+function bodyStats(c){
+  const held = c.sessions.filter(s => !s.lost);
+  if(!held.length) return '';
+  const counts = {};
+  held.forEach(s => (s.tags||[]).forEach(t => counts[t] = (counts[t]||0)+1));
+  const keys = [...TAGS, ...Object.keys(counts).filter(k => !TAGS.includes(k))];
+  const max = Math.max(1, ...keys.map(k => counts[k]||0));
+  return `<div class="card"><div class="sub" style="margin-bottom:8px">Edzett testrészek (hányszor)</div>${keys.map(k =>
+    `<div class="stat"><span class="sl">${esc(cap(k))}${TAGS.includes(k) ? '' : ' (régi)'}</span><span class="st"><i class="${k==='egyéb'?'oth':''}" style="width:${(counts[k]||0)/max*100}%"></i></span><b>${counts[k]||0}</b></div>`).join('')}</div>`;
+}
+function last(c){ const t = today(); const s = sorted(c).filter(x => x.date <= t && !x.lost); return s.length ? s[s.length-1].date : null; }
+const parseW = v => { const w = String(v||'').trim().replace(',','.'); const f = parseFloat(w); return w==='' || !isFinite(f) ? null : Math.round(f*10)/10; };
+function readDoneForm(){
+  const d = ui.done;
+  d.weight = document.getElementById('d-w').value;
+  d.note = document.getElementById('d-note').value;
+}
+const MONTHS = ['január','február','március','április','május','június','július','augusztus','szeptember','október','november','december'];
+const addMonths = (ym,n) => { const [y,m] = ym.split('-').map(Number); const d = new Date(y, m-1+n, 1); return d.getFullYear()+'-'+pad(d.getMonth()+1); };
+const monthLabel = ym => ym.slice(0,4)+'. '+MONTHS[+ym.slice(5,7)-1];
+const money = n => Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g,' ')+' Ft';
+const parseMoney = v => { const n = parseInt(String(v||'').replace(/[^\d]/g,''),10); return isFinite(n) ? n : null; };
+function priceAt(date){ let r = null; db.prices.forEach(p => { if(p.from<=date && (!r || p.from>=r.from)) r = p; }); return r; }
+/* egy edzés értéke: bérletes = a bérlet 1/10 része, 1 alkalom = az 1 alkalom ára; a megtörtént (befagyasztott) edzés értéke nem változik */
+function sessionValues(c){
+  const m = new Map(), ty = typeOf(c), ss = sorted(c);
+  const counted = ty==='trial' ? ss : ss.filter(x => !x.trial);
+  const end = c.last ? (c.lastEnd || sizeOf(c)) : Infinity;
+  const over = new Set(ty==='trial' || end===Infinity ? [] : counted.slice(end).map(x => x.id));
+  ss.forEach(x => {
+    if(over.has(x.id)){ m.set(x.id,0); return; }
+    if(x.val!==undefined && x.val!==null){ m.set(x.id,x.val); return; }
+    const pr = priceAt(x.date);
+    m.set(x.id, !pr ? 0 : (ty==='trial' || x.trial) ? pr.single : pr.pack/PACK);
+  });
+  return m;
+}
+/* tervezett alkalmak: mától a következő hónap végéig, a fix beosztásból (lemondott, már rögzített és szabadságos napok nélkül) */
+function planInfo(){
+  const t = today(), end = addDays(addMonths(t.slice(0,7),2)+'-01',-1);
+  const planned = [], offMissed = [], cap = new Map();
+  db.clients.forEach(c => cap.set(c.id, (typeOf(c)==='trial' || c.last) ? remaining(c) : Infinity));
+  const val = (c,d) => { const pr = priceAt(d); return !pr ? 0 : typeOf(c)==='trial' ? pr.single : pr.pack/PACK; };
+  for(let d=t; d<=end; d=addDays(d,1)){
+    const dw = dowOf(d), off = !!offOn(d);
+    db.slots.filter(sl => sl.dow===dw).sort((a,b) => a.time.localeCompare(b.time)).forEach(sl => {
+      attendees(sl,d).forEach(a => {
+        if(a.skipped) return;
+        const c = db.clients.find(x => x.id===a.clientId);
+        if(doneOf(c, sessKey(sl.id,a.clientId,d), d)) return;
+        if(off){ offMissed.push({cid:c.id, date:d, value:val(c,d)}); return; }
+        if(cap.get(c.id) <= 0) return;
+        cap.set(c.id, cap.get(c.id)-1);
+        planned.push({cid:c.id, date:d, value:val(c,d)});
+      });
+    });
+  }
+  return {planned, offMissed};
+}
+function unmarkedPast(ym){
+  const t = today(); let n = 0;
+  for(let d=ym+'-01'; d.startsWith(ym) && d<t; d=addDays(d,1)){
+    if(offOn(d)) continue;
+    const dw = dowOf(d);
+    db.slots.filter(sl => sl.dow===dw).forEach(sl => attendees(sl,d).forEach(a => {
+      if(a.skipped) return;
+      const c = db.clients.find(x => x.id===a.clientId);
+      if(!doneOf(c, sessKey(sl.id,a.clientId,d), d)) n++;
+    }));
+  }
+  return n;
+}
+function monthRevenue(ym){
+  const per = new Map();
+  const get = id => { if(!per.has(id)) per.set(id,{cid:id,rv:0,rn:0,pv:0,pn:0,ln:0}); return per.get(id); };
+  let realV=0, realN=0, planV=0, planN=0, lostV=0, lostN=0;
+  db.clients.forEach(c => {
+    const vals = sessionValues(c);
+    c.sessions.forEach(x => {
+      if(!x.date.startsWith(ym)) return;
+      const v = vals.get(x.id) || 0, e = get(c.id);
+      e.rv += v; e.rn++; realV += v; realN++;
+      if(x.lost){ e.ln++; lostV += v; lostN++; }
+    });
+  });
+  const P = planInfo();
+  P.planned.forEach(x => { if(!x.date.startsWith(ym)) return; const e = get(x.cid); e.pv += x.value; e.pn++; planV += x.value; planN++; });
+  const om = P.offMissed.filter(x => x.date.startsWith(ym));
+  return {per:[...per.values()], realV, realN, planV, planN, lostV, lostN, offN:om.length, offV:om.reduce((a,x) => a+x.value,0), unmarked:unmarkedPast(ym)};
+}
+const offOn = date => db.offs.find(o => o.from<=date && date<=o.to) || null;
+function affected(o){
+  let bookings = 0; const names = new Set();
+  let d = o.from, guard = 0;
+  while(d <= o.to && guard++ < 400){
+    const dw = dowOf(d);
+    db.slots.filter(sl => sl.dow===dw).forEach(sl => attendees(sl,d).filter(a => !a.skipped).forEach(a => { bookings++; names.add(cname(a.clientId)); }));
+    d = addDays(d,1);
+  }
+  return {bookings, names:[...names].sort((x,y)=>x.localeCompare(y,'hu'))};
+}
+function addLost(slotId, clientId, date){
+  const c = db.clients.find(x => x.id===clientId), key = sessKey(slotId,clientId,date);
+  if(c.sessions.some(x => x.ref===key && x.lost)) return;
+  c.sessions.push({id:uid(), date, tags:[], weight:null, note:'', ref:key, lost:true, ...(typeOf(c)==='trial'?{trial:true}:{})});
+}
+function readClientForm(){
+  ui.name = document.getElementById('f-name').value;
+  const ph = document.getElementById('f-phone'); if(ph) ui.phone = ph.value;
+  const l = document.getElementById('f-last'); if(l) ui.last = !!l.checked;
+}
+function daysSince(s){ if(!s) return null; const a = new Date(s+'T00:00:00'), b = new Date(today()+'T00:00:00'); return Math.round((b-a)/864e5); }
+function ago(s){ const d = daysSince(s); if(d===null) return 'még nem volt edzés'; if(d===0) return 'ma volt edzés'; if(d===1) return 'tegnap'; return d+' napja'; }
+function futureCount(c){ const t = today(); return c.sessions.filter(x => x.date > t).length; }
+function remPill(c){
+  const t = typeOf(c), r = remaining(c), n = usedSessions(c).length;
+  if(t==='trial') return n ? '<span class="pill zero">1 alkalom · megvolt</span>' : '<span class="pill">1 alkalom · még nem volt</span>';
+  if(c.last) return r===0 ? '<span class="pill low">elfogyott · utolsó bérlet volt</span>' : `<span class="pill ${r<=2?'low':''}">${r} alkalom maradt · utolsó bérlet</span>`;
+  if(n && r===0) return '<span class="pill low">elfogyott – új bérlet jön</span>';
+  return `<span class="pill ${r<=2?'low':''}">${r} alkalom maradt</span>`;
+}
+
+/* ---------- naptár logika ---------- */
+const DURS = [[30,'30 perc'],[45,'45 perc'],[60,'1 óra'],[90,'1,5 óra'],[120,'2 óra']];
+const endTime = s => { const [h,m] = s.time.split(':').map(Number); const t = h*60+m+(s.dur||60); return pad(Math.floor(t/60)%24)+':'+pad(t%60); };
+const slotsSorted = () => [...db.slots].sort((a,b)=> a.dow-b.dow || a.time.localeCompare(b.time));
+function fixMembers(slot, date){ return db.members.filter(m => m.slotId===slot.id && m.from<=date && (!m.to || date<=m.to)); }
+function attendees(slot, date){
+  const out = [];
+  fixMembers(slot,date).forEach(m => {
+    const skipped = db.skips.some(k => k.slotId===slot.id && k.clientId===m.clientId && k.date===date);
+    out.push({clientId:m.clientId, kind:'fix', memberId:m.id, skipped});
+  });
+  db.extras.filter(x => x.slotId===slot.id && x.date===date).forEach(x => {
+    if(!out.some(o => o.clientId===x.clientId)) out.push({clientId:x.clientId, kind:'extra', extraId:x.id, skipped:false});
+  });
+  return out.filter(o => db.clients.some(c => c.id===o.clientId));
+}
+const occ = (slot,date) => attendees(slot,date).filter(a => !a.skipped).length;
+const baseOcc = (slot,date) => fixMembers(slot,date).length;
+const sessKey = (slotId,clientId,date) => slotId+'|'+clientId+'|'+date;
+function doneOf(c, key, date){
+  return c.sessions.find(s => s.ref===key && !s.lost) || c.sessions.find(s => s.date===date && !s.ref) || null;
+}
+function occPill(n){
+  const cls = n>capN() ? 'low' : n===capN() ? 'full' : n===0 ? 'zero' : '';
+  return `<span class="pill ${cls}">${n}/${capN()}</span>`;
+}
+function fixSlotsText(c){
+  const t = today();
+  const ms = db.members.filter(m => m.clientId===c.id && (!m.to || m.to>=t));
+  const ss = ms.map(m => db.slots.find(s => s.id===m.slotId)).filter(Boolean)
+    .sort((a,b)=> a.dow-b.dow || a.time.localeCompare(b.time));
+  return ss.map(s => DOWS[s.dow-1]+' '+s.time).join(', ');
+}
+
+/* ---------- fizetés ---------- */
+const PAYM = {atutalas:'átutalás', keszpenz:'készpénz'};
+/* bérletek fizetési állapota: archív (a naptár kezdőnapja előtt indult) bérletet nem követ */
+function payPacks(c){
+  if(typeOf(c)==='trial' || !db.calStart) return [];
+  const size = sizeOf(c), cs = sorted(c).filter(x => !x.trial), n = cs.length, groups = [];
+  for(let i=0;i<n;i+=size) groups.push(cs.slice(i,i+size));
+  const lastIdx = c.last ? Math.floor(((c.lastEnd || size)-1)/size) : Infinity;
+  const cur = (n>0 && n%size===0) ? n/size : Math.floor(n/size);
+  const pays = c.pays || [], payOf = i => pays.find(p => p.pack===i) || null;
+  const top = Math.min(lastIdx, payOf(cur) ? cur+1 : cur), out = [];
+  for(let i=0;i<=top;i++){
+    const g = groups[i];
+    if(g && g[0].date < db.calStart) continue;
+    const pay = payOf(i);
+    out.push({i, pay, state: pay ? 'paid' : g ? 'due' : i===cur ? (n===0 ? 'first' : 'next') : 'later'});
+  }
+  return out;
+}
+const trialUnpaid = c => !db.calStart ? [] : c.sessions.filter(x => !x.lost && (typeOf(c)==='trial' || x.trial) && !x.paid && x.date >= db.calStart);
+function payDue(c){
+  if(c.anon || !db.calStart) return null;
+  const u = trialUnpaid(c); if(u.length) return {kind:'trial', n:u.length};
+  const p = payPacks(c).find(x => !x.pay && x.state!=='later');
+  return p ? {kind:'pack', pack:p.i, state:p.state} : null;
+}
+const PAYST = {due:'fizetésre vár', next:'fizetésre vár (új bérlet)', first:'fizetésre vár', later:'következő bérlet · nem esedékes'};
+function payCard(c){
+  if(c.anon || !db.calStart) return '';
+  let h = '';
+  const u = trialUnpaid(c).length;
+  if(u) h += `<div class="warn paywarn">${u} kifizetetlen alkalom. Koppints az edzésre a fizetés rögzítéséhez.</div>`;
+  const ps = payPacks(c);
+  if(ps.length){
+    const open = ps.find(p => !p.pay && p.state!=='later');
+    h += `<div class="card"><div class="sub" style="margin-bottom:4px">Fizetés</div>` + [...ps].reverse().map(p => {
+      const lab = `<b class="grow">${p.i+1}. bérlet</b>`;
+      if(p.pay) return `<button class="payrow" data-a="editpay" data-p="${p.i}">${lab}<span class="sub">✓ kifizetve · ${md(p.pay.date)} · ${PAYM[p.pay.method]}</span></button>`;
+      return `<div class="payrow">${lab}<span class="pill ${p.state==='later' ? 'zero' : 'pay'}">${PAYST[p.state]}</span>${open && open.i===p.i ? `<button class="mini ok" data-a="newpay" data-p="${p.i}">Fizetés rögzítése</button>` : (p.state==='later' && !open ? `<button class="mini" data-a="newpay" data-p="${p.i}">Előre fizetés</button>` : '')}</div>`;
+    }).join('') + `</div>`;
+  }
+  return h;
+}
+function payTag(c,s){
+  if(!db.calStart || s.lost || !(typeOf(c)==='trial' || s.trial) || s.date < db.calStart) return '';
+  return s.paid ? `<span class="sub">✓ fizetve</span>` : `<span class="pill pay" style="font-size:12px;padding:1px 8px">fizetésre vár</span>`;
+}
+function readPayForm(){ const d = document.getElementById('f-pdate'); if(d && d.value) ui.date = d.value; }
+
+/* ---------- várólista ---------- */
+const slotLabel = sl => DOWS[sl.dow-1]+' '+sl.time;
+function cleanWait(){
+  db.wait = (db.wait||[]).filter(w => { const c = db.clients.find(x => x.id===w.clientId); return c && !c.anon; });
+  const ok = id => db.slots.some(sl => sl.id===id);
+  db.wait.forEach(w => { w.fix = w.fix.filter(ok); w.flex = w.flex.filter(ok); });
+  db.wait = db.wait.filter(w => w.fix.length || w.flex.length);
+}
+function waitFor(slot,date){
+  if(date < today() || offOn(date) || (db.calStart && date < db.calStart) || occ(slot,date) >= capN()) return [];
+  const at = attendees(slot,date);
+  return db.wait.filter(w => (w.fix.includes(slot.id) || w.flex.includes(slot.id)) && !at.some(a => a.clientId===w.clientId))
+    .sort((a,b) => a.ts.localeCompare(b.ts) || a.id.localeCompare(b.id));
+}
+function placeOnce(sl,date,cid){
+  if(db.calStart && date < db.calStart) return `A naptár kezdőnapja ${md(db.calStart)}. Korábbi edzést a vendégadatlapon rögzíts (archív).`;
+  if(occ(sl,date) >= capN()) return `Ez az alkalom tele van (${capN()}/${capN()}). Csak akkor rakható be valaki, ha előbb valaki lemondja (Lemondta: most), vagy másik napot választasz.`;
+  db.extras.push({id:uid(), slotId:sl.id, clientId:cid, date}); return null;
+}
+function placeFix(sl,date,cid){
+  if(db.calStart && date < db.calStart) return `A naptár kezdőnapja ${md(db.calStart)}. Korábbi napra nem rakható be fix vendég.`;
+  for(let i=0;i<12;i++){
+    const d = addDays(date, 7*i);
+    if(occ(sl,d) >= capN()) return `${md(d)} dátumon már tele van (${capN()}/${capN()}), így nem rakható be fixen. Szabadíts fel helyet, vagy add hozzá csak egyszeri vendégként.`;
+  }
+  db.extras = db.extras.filter(x => !(x.slotId===sl.id && x.clientId===cid && x.date>=date));
+  db.members.push({id:uid(), slotId:sl.id, clientId:cid, from:date, to:null}); return null;
+}
+const waitLabs = ids => slotsSorted().filter(sl => ids.includes(sl.id)).map(slotLabel).join(', ');
+const telLink = c => c.phone ? `<a href="tel:${esc(c.phone.replace(/[^\d+]/g,''))}">${esc(c.phone)}</a>` : '';
+function renderWait(hd, app, fab){
+  hd.innerHTML = `<h1>Várólista</h1>`;
+  let h = '';
+  if(!db.slots.length) h += `<div class="empty">Előbb hozz létre időpontokat a Naptárban.</div>`;
+  else if(!db.wait.length) h += `<div class="empty">Nincs senki a várólistán.<br>Add hozzá lent az elsőt.</div>`;
+  h += [...db.wait].sort((a,b) => a.ts.localeCompare(b.ts) || a.id.localeCompare(b.id)).map(w => {
+    const c = db.clients.find(x => x.id===w.clientId);
+    return `<div class="card"><div class="row"><b class="grow">${esc(c.name)}</b><span class="sub">${md(w.ts)}</span></div>
+      ${c.phone ? `<div class="sub">${telLink(c)}</div>` : ''}
+      ${w.fix.length ? `<div class="sub">Fix helyet kér: ${esc(waitLabs(w.fix))}</div>` : ''}
+      ${w.flex.length ? `<div class="sub">Beugró: ${esc(waitLabs(w.flex))}</div>` : ''}
+      ${w.note ? `<div class="sub">${esc(w.note)}</div>` : ''}
+      <div class="minis"><button class="mini" data-a="editwait" data-id="${w.id}">Szerkesztés</button><button class="mini" data-a="delwait" data-id="${w.id}">Törlés</button></div></div>`;
+  }).join('');
+  app.innerHTML = h;
+  if(db.slots.length) fab.innerHTML = `<div class="fab"><button class="big" data-a="newwait">+ Várólistára</button></div>`;
+}
+function readWaitForm(){
+  const w = ui.w, sel = document.getElementById('w-cl'), nt = document.getElementById('w-note');
+  if(sel && sel.value) w.clientId = sel.value;
+  if(nt) w.note = nt.value;
+}
+
+/* ---------- render ---------- */
+function render(){
+  const hd = document.getElementById('hd'), app = document.getElementById('app'), fab = document.getElementById('fabwrap');
+  fab.innerHTML = '';
+  document.getElementById('tabs').innerHTML =
+    `<button class="${tab==='clients'?'on':''}" data-a="tab" data-t="clients">Vendégek</button>
+     <button class="${tab==='cal'?'on':''}" data-a="tab" data-t="cal">Naptár</button>
+     <button class="${tab==='wait'?'on':''}" data-a="tab" data-t="wait">Várólista</button>
+     <button class="${tab==='rev'?'on':''}" data-a="tab" data-t="rev">Bevétel</button>`;
+  if(tab === 'cal') renderCal(hd, app, fab);
+  else if(tab === 'wait') renderWait(hd, app, fab);
+  else if(tab === 'rev') renderRev(hd, app, fab);
+  else renderClients(hd, app, fab);
+  renderModal();
+}
+
+function renderClients(hd, app, fab){
+  if(view === 'list'){
+    hd.innerHTML = `<h1>Vendégek</h1><button class="icon" data-a="settings">⚙︎ Beállítások</button>`;
+    let h = backupWarn();
+    if(!activeClients().length) h += `<div class="empty">Még nincs vendég.<br>Add hozzá az elsőt lent.</div>`;
+    const so = db.sort || {by:'name', dir:'asc'};
+    if(activeClients().length > 1) h += `<div class="sortbar"><span class="lbl">Rendezés:</span>${[['name','Név'],['sessions','Edzések'],['strength','Erő']].map(([k,l]) =>
+      `<button class="chip ${so.by===k?'on':''}" data-a="sort" data-k="${k}">${l}${so.by===k ? (so.dir==='asc' ? ' ↑' : ' ↓') : ''}</button>`).join('')}${activeClients().some(payDue) || payOnly ? `<button class="chip ${payOnly?'on':''}" data-a="payfilter">Fizetésre vár</button>` : ''}</div>`;
+    h += sortedClients().filter(c => !payOnly || payDue(c)).map(c => { const fd = fixDaysText(c); return `<div class="card"><button class="client" data-a="open" data-id="${c.id}">
+      <div class="row"><b class="grow">${esc(c.name)}${typeTag(c) ? ` <span class="tag">${typeTag(c)}</span>` : ''}${payDue(c) ? ' <span class="tag payt">fizetésre vár</span>' : ''}</b>${remPill(c)}</div>
+      <div class="sub meta">${heldCount(c)} edzés${c.strength ? ` · erő ${strDots(c)}` : ''}${fd ? ' · '+esc(fd) : ''}</div></button></div>`; }).join('');
+    app.innerHTML = h;
+    fab.innerHTML = `<div class="fab"><button class="big" data-a="newclient">+ Új vendég</button></div>`;
+  } else if(view === 'settings'){
+    hd.innerHTML = `<button class="icon" data-a="back">‹ Vissza</button><h1>Beállítások</h1>`;
+    const anonN = db.clients.filter(c => c.anon).length;
+    app.innerHTML = `
+      ${backupWarn()}
+      <div class="card"><b>Biztonsági mentés</b>
+      <p class="sub">Az adatok csak ezen a telefonon vannak. Ha telefont cserélsz, törlöd az appot vagy a Safari adatait, az adat elvész. Ezért mentsd fájlba rendszeresen, és tedd iCloud Drive-ra vagy küldd el magadnak.</p>
+      <p class="sub">Utolsó mentés: ${db.lastExport ? md(iso(new Date(db.lastExport))) : 'még nem volt'}</p>
+      <button class="big" data-a="export">Mentés fájlba</button></div>
+      <div class="card"><b>Mentési emlékeztető</b>
+      <label class="chk"><input type="checkbox" id="cfg-mon" ${db.cfg.bkMonday ? 'checked' : ''}><span>Hétfőnként, az első megnyitáskor</span></label>
+      <label>Mentés kérése ennyi új edzés után</label><input id="cfg-bk" inputmode="numeric" value="${db.cfg.bkEvery}">
+      <div class="hint">5 és 500 között. Az utolsó mentés óta ${sinceBackup()} új edzés került be.</div></div>
+      <div class="card"><b>Max. létszám időpontonként</b>
+      <input id="cfg-cap" inputmode="numeric" value="${db.cfg.cap}"><div class="hint">1 és 12 között. A meglévő foglalásokat nem érinti.</div></div>
+      <div class="card"><b>Visszatöltés fájlból</b>
+      <p class="sub">Figyelem: felülírja a jelenlegi adatokat.</p>
+      <input type="file" id="imp" accept=".json,application/json"></div>
+      ${anonN ? `<div class="card"><b>Törölt (anonim) vendégek: ${anonN}</b><p class="sub">Az edzéseik és fizetéseik név nélkül megmaradnak, hogy a bevétel ne változzon.</p></div>` : ''}
+      <div class="card"><b>Minden adat törlése</b>
+      <p class="sub">Véglegesen törli a vendégeket, a naptárat, az árakat, a várólistát és a szabadságokat. A beállítások megmaradnak. Előbb készíts mentést.</p>
+      <button class="big" style="background:var(--danger)" data-a="wipe">Minden adat törlése</button></div>
+      <div class="sub" style="text-align:center;margin:18px 0">Edzés napló · verzió ${VERSION}</div>`;
+    document.getElementById('imp').onchange = importFile;
+    document.getElementById('cfg-mon').onchange = e => { db.cfg.bkMonday = !!e.target.checked; save(); };
+    const num = (id,key,lo,hi,def) => { document.getElementById(id).onchange = e => { const n = parseInt(e.target.value,10); db.cfg[key] = isFinite(n) ? Math.max(lo,Math.min(hi,n)) : def; e.target.value = db.cfg[key]; save(); }; };
+    num('cfg-bk','bkEvery',5,500,50); num('cfg-cap','cap',1,12,3);
+  } else {
+    const c = db.clients.find(x => x.id === view);
+    if(!c){ view = 'list'; return renderClients(hd, app, fab); }
+    hd.innerHTML = `<button class="icon" data-a="back">‹ Vissza</button><h1>${esc(c.name)}</h1><button class="icon" data-a="editclient" data-id="${c.id}">Szerk.</button>`;
+    const ss = sorted(c);
+    const ty = typeOf(c), size = sizeOf(c);
+    const counted = ty==='trial' ? ss : ss.filter(s => !s.trial);
+    const trialOld = ty==='trial' ? [] : ss.filter(s => s.trial);
+    const groups = [];
+    for(let i=0;i<counted.length;i+=size) groups.push(counted.slice(i,i+size));
+    const fx = fixSlotsText(c);
+    const sessRow = s => s.lost
+      ? `<button class="sess lost" data-a="editsess" data-id="${s.id}"><span class="d">${md(s.date)}</span><span class="t"><b>Késői lemondás</b> · az alkalom elveszett${s.note ? ' · '+esc(s.note) : ''}</span></button>`
+      : `<button class="sess${(s.tags||[]).includes('egyéb') ? ' other' : ''}" data-a="editsess" data-id="${s.id}">
+          <span class="d">${md(s.date)}</span>
+          <span class="t">${[...(s.tags||[]).map(t => t==='egyéb' ? '<b>egyéb</b>' : esc(t)), s.note ? esc(s.note) : ''].filter(Boolean).join(' · ') || '<span class="sub">–</span>'}${(s.tags||[]).includes('egyéb') && !s.note ? ' <span class="sub">· nincs magyarázat</span>' : ''}</span>
+          ${s.weight!=null ? `<span class="w">${String(s.weight).replace('.',',')} kg</span>`:''}${payTag(c,s) ? `<span class="w">${payTag(c,s)}</span>` : ''}</button>`;
+    const lastIdx = c.last ? Math.floor(((c.lastEnd || size)-1)/size) : null;
+    const head = gi => ty==='trial' ? '1 alkalom' : (c.last && gi>lastIdx) ? 'Kereten felüli alkalmak' : `${gi+1}. bérlet · ${groups[gi].length}/${size}${c.last && gi===lastIdx ? ' · utolsó' : ''}`;
+    let h = `<div class="card"><div class="row"><div class="grow"><div class="sub">${ty==='trial' ? '1 alkalom' : c.last ? 'Utolsó bérlet' : 'Aktuális bérlet'}</div>${remPill(c)}</div>
+      <div class="sub" style="text-align:right">${last(c) ? 'Utoljára: '+ago(last(c)) : 'még nem volt edzés'}</div></div>
+      <div class="sub" style="margin-top:8px">Összesen ${heldCount(c)} edzés${lostCount(c) ? ' · '+lostCount(c)+' késői lemondás' : ''}</div>
+      ${c.strength ? `<div class="sub">Erőszint: ${strDots(c)} (${c.strength}/5)</div>` : ''}
+      ${fx ? `<div class="sub">Fix időpont: ${esc(fx)}</div>` : ''}
+      ${c.phone ? `<div class="sub">Telefon: <a href="tel:${esc(c.phone.replace(/[^\d+]/g,''))}">${esc(c.phone)}</a></div>` : ''}</div>`;
+    h += payCard(c);
+    if(futureCount(c)) h += `<div class="warn">${futureCount(c)} edzés jövőbeli dátummal szerepel. Ha elírás, koppints rá és javítsd.</div>`;
+    h += weightChart(ss);
+    h += bodyStats(c);
+    if(!ss.length) h += `<div class="empty">Még nincs rögzített edzés.</div>`;
+    h += [...groups.keys()].reverse().map(gi => `<div class="grp">${head(gi)}</div>` + [...groups[gi]].reverse().map(sessRow).join('')).join('');
+    if(trialOld.length) h += `<div class="grp">1 alkalom</div>` + [...trialOld].reverse().map(sessRow).join('');
+    app.innerHTML = h;
+    fab.innerHTML = `<div class="fab"><button class="big" data-a="newsess">+ Edzés</button></div>`;
+  }
+}
+
+function renderCal(hd, app, fab){
+  if(!calWeek) calWeek = mondayOf(today());
+  const t = today();
+  hd.innerHTML = `<button class="icon" data-a="wk" data-n="-1">‹</button><h1 style="text-align:center;font-size:14px">${md(calWeek)}–${md(addDays(calWeek,6))}</h1>
+    <button class="icon" data-a="wk" data-n="0">Ma</button><button class="icon" data-a="wk" data-n="1">›</button>`;
+  const times = [...new Set(db.slots.map(s => s.time))].sort();
+  const wkEnd = addDays(calWeek,6);
+  const banners = db.offs.filter(o => o.from<=wkEnd && o.to>=calWeek).sort((a,b) => a.from.localeCompare(b.from)).map(o =>
+    `<button class="offb" data-a="editoff" data-id="${o.id}"><span class="grow">${md(o.from)}${o.from!==o.to ? '–'+md(o.to) : ''} · ${esc(o.note || 'nincs edzés')}</span><span>${affected(o).bookings} foglalás ›</span></button>`).join('');
+  let h = `<div class="offbar"><button class="mini" data-a="newoff">+ Szabadság / betegség</button></div>${banners}`;
+  if(!times.length){
+    h += `<div class="empty">Még nincs időpont.<br>Add hozzá lent az elsőket.</div>`;
+  } else {
+    h += `<div class="cg"><div class="cg-h"></div>`;
+    for(let i=0;i<7;i++){
+      const date = addDays(calWeek,i);
+      h += `<div class="cg-h ${date===t?'today':''} ${offOn(date)?'off':''}"><b>${DOWS[i]}</b><span>${+date.slice(8,10)}</span></div>`;
+    }
+    times.forEach(tm => {
+      const ends = [...new Set(db.slots.filter(s => s.time===tm).map(endTime))];
+      h += `<div class="cg-t"><b>${tm}</b>${ends.length===1 ? `<span>${ends[0]}</span>` : ''}</div>`;
+      for(let i=0;i<7;i++){
+        const date = addDays(calWeek,i);
+        const s = db.slots.find(x => x.dow===i+1 && x.time===tm);
+        if(!s){ h += `<div class="cg-e"></div>`; continue; }
+        const at = attendees(s,date), n = at.filter(a => !a.skipped).length;
+        const cls = n>capN() ? 'over' : n===capN() ? 'full' : n===0 ? 'zero' : 'some';
+        const names = at.map(a => {
+          const c = db.clients.find(x => x.id===a.clientId);
+          const done = !!doneOf(c, sessKey(s.id,a.clientId,date), date);
+          let nm = esc(c.name.trim().split(/\s+/)[0]);
+          if(a.kind==='extra') nm += '*';
+          const late = a.skipped && c.sessions.some(x => x.ref===sessKey(s.id,a.clientId,date) && x.lost);
+          if(a.skipped) nm = `<s>${nm}</s>`;
+          return `<span class="n ${late?'lost':''}">${done?'✓':''}${nm}</span>`;
+        }).join('');
+        h += `<button class="cg-c ${cls} ${date===t?'tdy':''} ${offOn(date)?'off':''}" data-a="slot" data-s="${s.id}" data-d="${date}"><i class="cnt">${n}/${capN()}</i>${names}${waitFor(s,date).length ? `<b class="vb" title="várólista">V${waitFor(s,date).length}</b>` : ''}</button>`;
+      }
+    });
+    h += `</div><div class="hint" style="margin-top:12px">Koppints egy cellára a részletekhez. ✓ megtartva · áthúzva: lemondta · * egyszeri vendég · V2 = 2 várólistás illik ide (van szabad hely)</div>`;
+  }
+  app.innerHTML = h;
+  fab.innerHTML = `<div class="fab"><button class="big" data-a="newslot">+ Új időpontok</button></div>`;
+}
+
+function renderRev(hd, app, fab){
+  const t = today(), cur = t.slice(0,7), nxt = addMonths(cur,1);
+  if(!revMonth) revMonth = cur;
+  const earliest = db.clients.flatMap(c => c.sessions.map(x => x.date.slice(0,7))).concat([cur]).sort()[0];
+  hd.innerHTML = `<button class="icon" data-a="rm" data-n="-1" ${revMonth<=earliest?'disabled':''}>‹</button><h1 style="text-align:center">${monthLabel(revMonth)}</h1>
+    <button class="icon" data-a="rm" data-n="0">Most</button><button class="icon" data-a="rm" data-n="1" ${revMonth>=nxt?'disabled':''}>›</button>`;
+  if(!db.prices.length){
+    app.innerHTML = `<div class="card"><b>Add meg az árakat</b><div class="sub" style="margin:6px 0 12px">A bevétel tervezéséhez kell a bérlet ára (10 alkalmas) és az 1 alkalom ára. Egy edzés a bérlet arányos részét éri.</div><button class="big" data-a="editprice">Árak megadása</button></div>`;
+    return;
+  }
+  const R = monthRevenue(revMonth), isCur = revMonth===cur, isPast = revMonth<cur;
+  const total = R.realV + R.planV, heldN = R.realN - R.lostN;
+  let h = `<div class="card"><div class="sub">${isPast ? 'Realizált bevétel' : isCur ? 'Várható bevétel (realizált + tervezett)' : 'Tervezett bevétel'}</div><div class="bignum">${money(total)}</div>`;
+  if(isCur) h += `<div class="sub">Realizált eddig: <b>${money(R.realV)}</b> · ${heldN} edzés</div><div class="sub">Tervezett, hátralévő: <b>${money(R.planV)}</b> · ${R.planN} alkalom</div>`;
+  else if(isPast) h += `<div class="sub">${heldN} edzés</div>`;
+  else h += `<div class="sub">${R.planN} tervezett alkalom, a jelenlegi fix beosztás és az árak alapján</div>`;
+  if(R.lostN) h += `<div class="sub">Ebből késői lemondás: ${R.lostN} alkalom · ${money(R.lostV)}</div>`;
+  h += `</div>`;
+  if(R.unmarked) h += `<div class="warn">${R.unmarked} múltbeli, beosztott alkalom még nincs megtartottnak jelölve, ezek nincsenek benne a számban. Jelöld őket a Naptárban.</div>`;
+  if(R.offN) h += `<div class="warn offw">Szabadság / betegség miatt kimaradó alkalom: ${R.offN} (kb. ${money(R.offV)}). Ez nincs benne a becslésben.</div>`;
+  const rows = R.per.filter(e => e.rn || e.pn).sort((a,b) => (b.rv+b.pv)-(a.rv+a.pv));
+  if(rows.length){
+    h += `<div class="grp">Vendégenként</div><div class="card">` + rows.map(e =>
+      `<div class="rrow"><span class="grow">${esc(cname(e.cid))}<div class="sub">${[e.rn-e.ln ? (e.rn-e.ln)+' edzés' : '', e.ln ? e.ln+' késői lemondás' : '', e.pn ? e.pn+' tervezett' : ''].filter(Boolean).join(' · ')}</div></span><b>${money(e.rv+e.pv)}</b></div>`).join('') + `</div>`;
+  } else h += `<div class="empty">Ebben a hónapban nincs bevétel.</div>`;
+  const pr = priceAt(t) || db.prices[0];
+  h += `<div class="grp">Árak</div><div class="card"><div class="row"><div class="grow"><div>Bérlet (10 alkalmas): <b>${money(pr.pack)}</b></div><div class="sub">Alkalmanként: ${money(pr.pack/PACK)}</div><div style="margin-top:4px">1 alkalom: <b>${money(pr.single)}</b></div></div><button class="mini" data-a="editprice">Módosítás</button></div>
+    ${db.prices.length>1 ? `<div class="sub" style="margin-top:10px">Árváltozások:</div>` + [...db.prices].reverse().map(p => `<div class="sub">${p.from==='1970-01-01' ? 'kezdettől' : md(p.from)}: bérlet ${money(p.pack)} · 1 alkalom ${money(p.single)}</div>`).join('') : ''}</div>`;
+  app.innerHTML = h;
+}
+
+function backupWarn(){
+  const r = backupDue(); if(!r) return '';
+  return `<div class="warn">${bkMsg(r)} <button data-a="export" style="margin-left:6px">Mentés most</button></div>`;
+}
+
+function weightChart(ss){
+  const pts = ss.filter(s => s.weight!=null).map(s => ({d:s.date, w:s.weight}));
+  if(pts.length < 2) return pts.length===1 ? `<div class="card"><div class="sub">Testsúly</div><b>${String(pts[0].w).replace('.',',')} kg</b> <span class="sub">(${md(pts[0].d)})</span></div>` : '';
+  const W=320,H=110,p=8;
+  const ws = pts.map(x=>x.w), mn = Math.min(...ws), mx = Math.max(...ws), rg = (mx-mn)||1;
+  const t0 = new Date(pts[0].d).getTime(), t1 = new Date(pts[pts.length-1].d).getTime(), tr = (t1-t0)||1;
+  const X = d => p + (new Date(d).getTime()-t0)/tr*(W-2*p);
+  const Y = w => H-p - (w-mn)/rg*(H-2*p);
+  const line = pts.map(x => X(x.d).toFixed(1)+','+Y(x.w).toFixed(1)).join(' ');
+  const dots = pts.map(x => `<circle cx="${X(x.d).toFixed(1)}" cy="${Y(x.w).toFixed(1)}" r="3.5" fill="var(--acc)"/>`).join('');
+  const f = pts[0].w, l = pts[pts.length-1].w, diff = Math.round((l-f)*10)/10;
+  return `<div class="card"><div class="row"><div class="sub grow">Testsúly</div><b>${String(l).replace('.',',')} kg</b>
+    <span class="sub">(${diff>0?'+':''}${String(diff).replace('.',',')} kg az első mérés óta)</span></div>
+    <svg viewBox="0 0 ${W} ${H}"><polyline points="${line}" fill="none" stroke="var(--acc)" stroke-width="2"/>${dots}</svg>
+    <div class="row sub"><span class="grow">${md(pts[0].d)}</span><span>${mn.toString().replace('.',',')}–${mx.toString().replace('.',',')} kg</span><span class="grow" style="text-align:right">${md(pts[pts.length-1].d)}</span></div></div>`;
+}
+
+function renderModal(){
+  const m = document.getElementById('modal');
+  if(!ui){ m.innerHTML=''; return; }
+  if(ui.type === 'client'){
+    const ct = ui.ctype;
+    const strengthBlock = `<label>Erőszint (opcionális)</label>
+      <div class="chips">${[1,2,3,4,5].map(v => `<button type="button" class="chip ${ui.strength===v?'on':''}" data-a="str" data-v="${v}">${v}</button>`).join('')}</div>
+      <div class="hint">1 = legkezdőbb, 5 = legerősebb. Koppints újra a kijelölt számra a törléshez.</div>`;
+    const extra = ct==='trial'
+      ? `<div class="hint">Egyetlen alkalom. Ha később bérletet vesz, váltsd át "Bérletes"-re: ez az alkalom nem számít bele a bérletbe.</div>`
+      : `<div class="hint">A bérlet 10 alkalmas, és alapból folyamatosan megújul: az utolsó alkalom után a következő edzéstől automatikusan új bérlet kezdődik.</div>
+         <label class="chk"><input type="checkbox" id="f-last" ${ui.last ? 'checked' : ''}><span>Utolsó bérlet: a jelenlegi bérlet elfogyása után nem kezdődik új</span></label>`;
+    m.innerHTML = `<div class="modal"><div class="sheet"><h2>${ui.id?'Vendég szerkesztése':'Új vendég'}</h2>
+      <label>Név</label><input id="f-name" value="${esc(ui.name||'')}" autocomplete="off">
+      <label>Telefonszám (opcionális)</label><input id="f-phone" type="tel" inputmode="tel" value="${esc(ui.phone||'')}" autocomplete="off">
+      <label>Típus</label><div class="chips">${[['pack','Bérletes'],['trial','1 alkalom']].map(([k,l]) => `<button type="button" class="chip ${ct===k?'on':''}" data-a="ctype" data-t="${k}">${l}</button>`).join('')}</div>
+      ${extra}
+      ${strengthBlock}
+      <div class="btns">${ui.id?'<button class="del" data-a="delclient">Törlés</button>':''}<button data-a="close">Mégse</button><button class="ok" data-a="saveclient">Mentés</button></div></div></div>`;
+    setTimeout(()=>{ const i = document.getElementById('f-name'); if(i && ui && !ui.id) i.focus(); },50);
+  } else if(ui.type === 'sess'){
+    const s = ui.s;
+    m.innerHTML = `<div class="modal"><div class="sheet"><h2>${ui.id?'Edzés szerkesztése':'Új edzés'}</h2>${s.lost ? '<div class="warn">Késői lemondás miatt levont alkalom. Ha törlöd, az alkalom visszakerül a vendég csomagjába.</div>' : ''}
+      <label>Dátum</label>${s.ref
+        ? `<input type="hidden" id="f-date" value="${s.date}"><div class="datebtn" style="opacity:.7">${md(s.date)}</div><div class="hint">Ez az edzés a naptárból került be, a dátuma ott módosítható (Naptár → Visszavonás, majd új időpontra rögzítés).</div>`
+        : `${dateField('f-date',s.date,archMax())}<div class="hint">Itt csak archív edzést rögzíthetsz: legkésőbb ${md(archMax())}. Ennél újabb alkalom a Naptárban rögzíthető.</div>`}
+      <label>Izomcsoport</label><div class="chips">${[...TAGS, ...s.tags.filter(t => !TAGS.includes(t))].map(t=>`<button type="button" class="chip ${s.tags.includes(t)?'on':''} ${t==='egyéb'?'oth':''}" data-a="tag" data-t="${t}">${t}</button>`).join('')}</div>
+      ${s.tags.includes('egyéb') ? '<div class="hint oth">Egyéb esetén írd le a megjegyzésben, mi történt és miért.</div>' : ''}
+      <label>Testsúly (kg, opcionális)</label><input id="f-w" inputmode="decimal" placeholder="pl. 91,5" value="${s.weight!=null?String(s.weight).replace('.',','):''}">
+      <label>Megjegyzés (opcionális)</label><input id="f-note" value="${esc(s.note)}" autocomplete="off">
+      ${(!s.lost && db.calStart && s.date >= db.calStart && (s.trial || typeOf(db.clients.find(x=>x.id===view)||{})==='trial')) ? `<label>Kifizette?</label><div class="chips">${[['','Még nem'],['atutalas','Átutalás'],['keszpenz','Készpénz']].map(([k,l]) => `<button type="button" class="chip ${((s.paid&&s.paid.method)||'')===k?'on':''}" data-a="spay" data-k="${k}">${l}</button>`).join('')}</div>` : ''}
+      <div class="btns">${ui.id?'<button class="del" data-a="delsess">Törlés</button>':''}<button data-a="close">Mégse</button><button class="ok" data-a="savesess">Mentés</button></div></div></div>`;
+  } else if(ui.type === 'pay'){
+    const c = db.clients.find(x => x.id===ui.cid);
+    m.innerHTML = `<div class="modal"><div class="sheet"><h2>${ui.id ? 'Fizetés szerkesztése' : 'Fizetés rögzítése'}</h2>
+      <div class="sub" style="margin:-6px 0 6px">${esc(c.name)} · ${ui.pack+1}. bérlet</div>
+      <label>Mikor fizetett?</label>${dateField('f-pdate',ui.date,today())}
+      <label>Hogyan?</label><div class="chips">${[['atutalas','Átutalás'],['keszpenz','Készpénz']].map(([k,l]) => `<button type="button" class="chip ${ui.method===k?'on':''}" data-a="paym" data-k="${k}">${l}</button>`).join('')}</div>
+      <div class="btns">${ui.id ? '<button class="del" data-a="delpay">Visszavonás</button>' : ''}<button data-a="close">Mégse</button><button class="ok" data-a="savepay">Mentés</button></div></div></div>`;
+  } else if(ui.type === 'wait'){
+    const w = ui.w;
+    const cands = activeClients().filter(c => c.id===w.clientId || !db.wait.some(x => x.clientId===c.id)).sort((a,b) => a.name.localeCompare(b.name,'hu'));
+    const chips = (key, act) => slotsSorted().map(sl => `<button type="button" class="chip ${w[key].includes(sl.id)?'on':''}" data-a="${act}" data-s="${sl.id}">${slotLabel(sl)}</button>`).join('');
+    m.innerHTML = `<div class="modal"><div class="sheet"><h2>${ui.id ? 'Várólista szerkesztése' : 'Várólistára'}</h2>
+      <label>Vendég</label><select id="w-cl" ${ui.id ? 'disabled' : ''}>${cands.map(c => `<option value="${c.id}" ${c.id===w.clientId?'selected':''}>${esc(c.name)}</option>`).join('')}</select>
+      <label>Fix helyet kér (bármelyik jó)</label><div class="chips">${chips('fix','wfix')}</div>
+      <label>Beugróként ezekre jöhet</label><div class="chips">${chips('flex','wflex')}</div>
+      <label>Megjegyzés (opcionális)</label><input id="w-note" value="${esc(w.note)}" autocomplete="off">
+      <div class="btns"><button data-a="close">Mégse</button><button class="ok" data-a="savewait">Mentés</button></div></div></div>`;
+  } else if(ui.type === 'price'){
+    m.innerHTML = `<div class="modal"><div class="sheet"><h2>${ui.first ? 'Árak megadása' : 'Árak módosítása'}</h2>
+      <label>Bérlet ára (10 alkalmas), Ft</label><input id="p-pack" inputmode="numeric" value="${esc(ui.pack)}" placeholder="pl. 40000">
+      <div class="hint">Egy edzés a bérlet 1/10 részét éri.</div>
+      <label>1 alkalom ára, Ft</label><input id="p-single" inputmode="numeric" value="${esc(ui.single)}" placeholder="pl. 6000">
+      ${ui.first ? '<div class="hint">Az első ár minden korábbi edzésre is érvényes.</div>' : `<label>Érvényes ettől</label>${dateField('p-from',ui.from)}
+        <div class="hint">A már rögzített (megtörtént) edzések értéke nem változik. Az új ár csak a tervezett és a későbbi edzésekre vonatkozik.</div>`}
+      <div class="btns"><button data-a="close">Mégse</button><button class="ok" data-a="saveprice">Mentés</button></div></div></div>`;
+  } else if(ui.type === 'off'){
+    const af = ui.id ? affected({from:ui.from, to:ui.to}) : null;
+    m.innerHTML = `<div class="modal"><div class="sheet"><h2>${ui.id ? 'Szabadság / betegség szerkesztése' : 'Szabadság / betegség'}</h2>
+      <div class="hint" style="margin:0 0 6px">Ezeken a napokon nem lesz edzés. A foglalásokat az app nem tiltja le, csak pirosan jelzi az érintett napokat.</div>
+      <label>Kezdete</label>${dateField('f-from',ui.from)}
+      <label>Vége (az utolsó nap is beleszámít)</label>${dateField('f-to',ui.to)}
+      <label>Megjegyzés</label><input id="f-note" value="${esc(ui.note)}" placeholder="pl. szabadság, beteg" autocomplete="off">
+      ${af ? `<div class="card" style="margin-top:12px"><b>Érintett: ${af.bookings} foglalás</b>${af.names.length ? `<div class="sub" style="margin-top:4px">${af.names.map(esc).join(', ')}</div>` : ''}</div>` : ''}
+      <div class="btns">${ui.id ? '<button class="del" data-a="deloff">Törlés</button>' : ''}<button data-a="close">Mégse</button><button class="ok" data-a="saveoff">Mentés</button></div></div></div>`;
+  } else if(ui.type === 'newslot'){
+    const rows = ui.rows.map((r,i) => `<div class="card">
+      <div class="row"><input type="time" id="r-t-${i}" value="${r.time}" style="flex:1">
+        <select id="r-d-${i}" style="flex:1">${DURS.map(d => `<option value="${d[0]}" ${r.dur===d[0]?'selected':''}>${d[1]}</option>`).join('')}</select>
+        ${ui.rows.length>1 ? `<button class="mini" data-a="rrm" data-i="${i}">✕</button>` : ''}</div>
+      <div class="chips" style="margin-top:10px;gap:6px">${DOWS.map((d,k) => `<button type="button" class="chip ${r.days.includes(k+1)?'on':''}" style="padding:8px 10px;font-size:14px" data-a="rday" data-i="${i}" data-k="${k+1}">${d}</button>`).join('')}</div>
+      <div class="minis"><button class="mini" data-a="rpre" data-i="${i}" data-p="wd">H–P</button><button class="mini" data-a="rpre" data-i="${i}" data-p="all">Minden nap</button><button class="mini" data-a="rpre" data-i="${i}" data-p="none">Törlés</button></div></div>`).join('');
+    m.innerHTML = `<div class="modal"><div class="sheet"><h2>Új időpontok</h2>
+      <div class="hint" style="margin:0 0 10px">Soronként egy kezdési idő, időtartam, és azok a napok, amikor van ilyen időpont. Az üres sorokat kihagyja.</div>
+      ${rows}
+      <button class="mini" data-a="radd" style="width:100%;margin-top:4px">+ Újabb sor</button>
+      <div class="btns"><button data-a="close">Mégse</button><button class="ok" data-a="saveslot">Mentés</button></div></div></div>`;
+  } else if(ui.type === 'slot'){
+    const slot = db.slots.find(s => s.id===ui.slotId);
+    if(!slot){ ui=null; m.innerHTML=''; return; }
+    if(ui.done){
+      const d = ui.done, c = db.clients.find(x => x.id===d.cid);
+      m.innerHTML = `<div class="modal"><div class="sheet"><h2>${d.edit ? 'Edzés részletei' : 'Mit edzettek?'}</h2>
+        <div class="sub" style="margin:-6px 0 6px">${esc(c.name)} · ${md(ui.date)}</div>
+        <label>Izomcsoport</label><div class="chips">${[...TAGS, ...d.tags.filter(t => !TAGS.includes(t))].map(t => `<button type="button" class="chip ${d.tags.includes(t)?'on':''} ${t==='egyéb'?'oth':''}" data-a="dtag" data-t="${t}">${t}</button>`).join('')}</div>
+        ${d.tags.includes('egyéb') ? '<div class="hint oth">Egyéb esetén írd le a megjegyzésben, mi történt és miért.</div>' : ''}
+        <label>Testsúly (kg, opcionális)</label><input id="d-w" inputmode="decimal" placeholder="pl. 91,5" value="${esc(d.weight)}">
+        <label>Megjegyzés (opcionális)</label><input id="d-note" value="${esc(d.note)}" autocomplete="off">
+        ${(typeOf(c)==='trial' || d.trial) ? `<label>Kifizette?</label><div class="chips">${[['','Még nem'],['atutalas','Átutalás'],['keszpenz','Készpénz']].map(([k,l]) => `<button type="button" class="chip ${(d.pay||'')===k?'on':''}" data-a="dpay" data-k="${k}">${l}</button>`).join('')}</div>` : ''}
+        <div class="btns"><button data-a="dcancel">Mégse</button>${d.edit ? '' : '<button data-a="dskip">Részletek nélkül</button>'}<button class="ok" data-a="dsave">Mentés</button></div></div></div>`;
+      return;
+    }
+    const date = ui.date, at = attendees(slot,date), n = at.filter(a=>!a.skipped).length;
+    const rows = at.map(a => {
+      const c = db.clients.find(x=>x.id===a.clientId);
+      const key = sessKey(slot.id,c.id,date), ds = doneOf(c,key,date);
+      let st = '', bt = '';
+      if(ds){
+        st = '<span class="pill">✓ megtartva</span>';
+        bt = `<button class="mini" data-a="ddetail" data-c="${c.id}">Részletek</button>` + (ds.ref===key ? `<button class="mini" data-a="undone" data-c="${c.id}">Visszavonás</button>` : `<span class="sub">a vendégnél már rögzítve</span>`);
+      } else if(a.skipped){
+        const lost = c.sessions.some(x => x.ref===key && x.lost);
+        st = lost ? '<span class="pill low">lemondta &lt;24 óra · elveszett</span>' : '<span class="pill low">lemondta</span>';
+        bt = `<button class="mini" data-a="unskip" data-c="${c.id}">Mégis jön</button>`
+           + (lost ? `<button class="mini" data-a="unlate" data-c="${c.id}">Nem késői (visszaadom)</button>` : `<button class="mini" data-a="late" data-c="${c.id}">Késői volt (levonom)</button>`)
+           + `<button class="mini" data-a="endfix" data-c="${c.id}">Lemondás: végleg</button>`;
+      } else if(a.kind==='fix'){
+        bt = `${ui.date<=today() ? `<button class="mini ok" data-a="done" data-c="${c.id}">✓ Megtartva</button>` : ''}<button class="mini" data-a="skip" data-c="${c.id}">Lemondás: egyszeri</button><button class="mini" data-a="endfix" data-c="${c.id}">Lemondás: végleg</button>`;
+      } else {
+        st = '<span class="pill zero">egyszeri</span>';
+        bt = `${ui.date<=today() ? `<button class="mini ok" data-a="done" data-c="${c.id}">✓ Megtartva</button>` : ''}<button class="mini" data-a="rmextra" data-c="${c.id}">Törlés</button>`;
+      }
+      const det = ds ? [(ds.tags||[]).join(', '), ds.weight!=null ? String(ds.weight).replace('.',',')+' kg' : '', ds.note].filter(Boolean).join(' · ') : '';
+      const pd = payDue(c);
+      return `<div class="card"><div class="row"><b class="grow">${esc(c.name)}</b>${pd ? '<span class="pill pay">fizetésre vár</span>' : ''}${st}</div>${det ? `<div class="sub" style="margin-top:4px">${esc(det)}</div>` : ''}<div class="minis">${bt}</div></div>`;
+    }).join('');
+    const cand = activeClients().filter(c => !at.some(a => a.clientId===c.id)).sort((a,b)=>a.name.localeCompare(b.name,'hu'));
+    const addBox = !activeClients().length ? `<div class="hint">Előbb vegyél fel vendéget a Vendégek fülön.</div>`
+      : !cand.length ? `<div class="hint">Minden vendég szerepel már ezen az alkalmon.</div>`
+      : `<label>Vendég hozzáadása</label>
+         <select id="f-cl">${cand.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('')}</select>
+         <div class="minis"><button class="mini ok" data-a="addone">Csak ezen a napon</button><button class="mini" data-a="addfix">Fix, hetente ettől a naptól</button></div>
+         ${n>=capN() ? `<div class="hint">Ez az alkalom most tele van (${n}/${capN()}).</div>`:''}`;
+    const wl = waitFor(slot,date);
+    const waitBox = wl.length ? `<div class="grp">Várólista (${wl.length})</div>` + wl.map(w => {
+      const c = db.clients.find(x => x.id===w.clientId), fx = w.fix.includes(slot.id);
+      return `<div class="card"><div class="row"><b class="grow">${esc(c.name)}</b><span class="pill zero">${fx ? 'fix helyet kér' : 'beugró'}</span></div>
+        <div class="sub">${c.phone ? telLink(c) : 'nincs telefonszám'}</div>${w.note ? `<div class="sub">${esc(w.note)}</div>` : ''}
+        <div class="minis"><button class="mini ok" data-a="wonce" data-w="${w.id}">Beteszem erre az alkalomra</button>${fx ? `<button class="mini" data-a="wfixin" data-w="${w.id}">Beteszem fixen</button>` : ''}</div></div>`;
+    }).join('') : '';
+    m.innerHTML = `<div class="modal"><div class="sheet">
+      <div class="row"><h2 class="grow">${DOW[slot.dow-1]} ${md(date)} · ${slot.time}–${endTime(slot)}</h2>${baseOcc(slot,date)!==n ? `<span class="sub">alap ${baseOcc(slot,date)}/${capN()}</span>` : ''}${occPill(n)}</div>
+      ${offOn(date) ? `<div class="warn offw">Ezen a napon nem lesz edzés: ${esc(offOn(date).note || 'szabadság / betegség')}</div>` : ''}
+      ${rows || '<div class="empty" style="padding:16px">Üres időpont.</div>'}
+      ${waitBox}
+      ${addBox}
+      <div class="btns"><button class="del" data-a="delslot">Időpont törlése</button><button class="ok" data-a="close">Kész</button></div>
+    </div></div>`;
+  }
+}
+
+function readRows(){
+  ui.rows.forEach((r,i) => {
+    const t = document.getElementById('r-t-'+i), d = document.getElementById('r-d-'+i);
+    if(t) r.time = t.value;
+    if(d) r.dur = +d.value;
+  });
+}
+function readSessForm(){
+  ui.s.date = document.getElementById('f-date').value || today();
+  ui.s.note = document.getElementById('f-note').value.trim();
+  const w = document.getElementById('f-w').value.trim().replace(',','.');
+  ui.s.weight = w==='' ? null : (isFinite(parseFloat(w)) ? Math.round(parseFloat(w)*10)/10 : null);
+}
+
+function removeClientData(id){
+  db.members = db.members.filter(x => x.clientId!==id);
+  db.skips = db.skips.filter(x => x.clientId!==id);
+  db.extras = db.extras.filter(x => x.clientId!==id);
+}
+
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-a]'); if(!b) return;
+  const a = b.dataset.a, id = b.dataset.id, cid = b.dataset.c;
+  if(a==='dlgyes'){ const f = dlg && dlg.yes; const late = dlg && dlg.check ? !!document.getElementById('dlg-chk').checked : undefined; dlg = null; showDlg(); if(f) f(late); return; }
+  if(a==='dlgno'){ dlg = null; showDlg(); return; }
+  if(a==='pickdate'){ const h = document.getElementById(b.dataset.for); const v = (h && h.value) || today(); dp = {for:b.dataset.for, ym:v.slice(0,7), sel:h && h.value, max:b.dataset.max || ''}; renderDp(); return; }
+  if(a==='dpnav'){ dp.ym = addMonths(dp.ym, +b.dataset.n); renderDp(); return; }
+  if(a==='dppick'){ setDate(dp.for, b.dataset.d); dp = null; renderDp(); return; }
+  if(a==='dptoday'){ setDate(dp.for, today()); dp = null; renderDp(); return; }
+  if(a==='dpclose'){ dp = null; renderDp(); return; }
+  const cur = () => db.clients.find(x => x.id === view);
+  const slot = () => ui && db.slots.find(s => s.id===ui.slotId);
+
+  if(a==='tab'){ tab=b.dataset.t; ui=null; render(); window.scrollTo(0,0); }
+  else if(a==='settings'){ view='settings'; render(); }
+  else if(a==='back'){ view='list'; render(); }
+  else if(a==='open'){ view=id; render(); window.scrollTo(0,0); }
+  else if(a==='newclient'){ ui={type:'client',name:'',phone:'',ctype:'pack',last:false,strength:null}; render(); }
+  else if(a==='editclient'){ const c=db.clients.find(x=>x.id===id); ui={type:'client',id,name:c.name,phone:c.phone||'',ctype:typeOf(c),last:!!c.last,strength:c.strength||null}; render(); }
+  else if(a==='str'){ readClientForm(); const v=+b.dataset.v; ui.strength = ui.strength===v ? null : v; renderModal(); }
+  else if(a==='sort'){
+    const k = b.dataset.k;
+    if(db.sort && db.sort.by===k) db.sort.dir = db.sort.dir==='asc' ? 'desc' : 'asc';
+    else db.sort = {by:k, dir: k==='name' ? 'asc' : 'desc'};
+    save(); render();
+  }
+  else if(a==='ctype'){
+    readClientForm(); const t=b.dataset.t;
+    if(t!==ui.ctype) ui.ctype = t;
+    renderModal();
+  }
+  else if(a==='saveclient'){
+    readClientForm();
+    const n = ui.name.trim(); if(!n) return;
+    const c = ui.id ? db.clients.find(x=>x.id===ui.id) : {id:uid(), name:n, sessions:[]};
+    c.name = n; c.type = ui.ctype;
+    const phn = (ui.phone||'').replace(/[^\d+\-()\/. ]/g,'').trim().slice(0,30); if(phn) c.phone = phn; else delete c.phone;
+    if(ui.ctype==='trial' || c.size===1) delete c.size;
+    if(ui.ctype==='pack' && ui.last){
+      if(!c.last){ const sz = sizeOf(c); c.lastEnd = (Math.floor(usedSessions(c).length/sz)+1)*sz; }
+      c.last = true;
+    } else { delete c.last; delete c.lastEnd; }
+    if(ui.strength) c.strength = ui.strength; else delete c.strength;
+    if(!ui.id) db.clients.push(c);
+    save(); ui=null; render();
+  }
+  else if(a==='delclient'){
+    const c = db.clients.find(x=>x.id===ui.id);
+    const keep = c.sessions.length || (c.pays||[]).length;
+    ask(keep ? `Törlöd: ${c.name}? A név, telefonszám, súly, megjegyzések és a beosztás törlődik. Az edzések és a fizetések névtelenül megmaradnak, hogy a bevétel ne változzon.` : `Törlöd: ${c.name}?`, () => {
+      removeClientData(c.id); db.wait = (db.wait||[]).filter(w => w.clientId!==c.id);
+      if(!keep) db.clients = db.clients.filter(x => x.id!==c.id);
+      else { c.name = 'Törölt vendég'; delete c.phone; delete c.strength; c.anon = true; c.sessions.forEach(x => { x.weight = null; x.note = ''; x.tags = []; }); }
+      save(); ui=null; view='list'; render();
+    });
+  }
+  else if(a==='newsess'){ ui={type:'sess',s:{date:archMax(),tags:[],weight:null,note:''}}; render(); }
+  else if(a==='editsess'){ const s = cur().sessions.find(x=>x.id===id); ui={type:'sess',id,s:{...s,tags:[...(s.tags||[])]}}; render(); }
+  else if(a==='spay'){ readSessForm(); const k = b.dataset.k; if(k) ui.s.paid = {date: (ui.s.paid && ui.s.paid.date) || today(), method:k}; else delete ui.s.paid; renderModal(); }
+  else if(a==='tag'){ readSessForm(); const t=b.dataset.t, i=ui.s.tags.indexOf(t); i>=0?ui.s.tags.splice(i,1):ui.s.tags.push(t); renderModal(); }
+  else if(a==='savesess'){
+    readSessForm(); const c = cur();
+    const orig = ui.id && c.sessions.find(x => x.id===ui.id);
+    if(!ui.s.ref && ui.s.date > archMax() && !(orig && orig.date===ui.s.date)) return note(`Kézzel legkésőbb ${md(archMax())} dátumú edzést rögzíthetsz. Ennél újabb alkalmat a Naptárban rögzíts.`);
+    if(orig && orig.ref) ui.s.date = orig.date;
+    if(ui.id){ const i = c.sessions.findIndex(x=>x.id===ui.id); c.sessions[i] = {...ui.s, id:ui.id}; }
+    else c.sessions.push({...ui.s, id:uid(), ...(typeOf(c)==='trial' ? {trial:true} : {})});
+    save(); ui=null; render();
+  }
+  else if(a==='delsess'){ const sid = ui.id; ask('Törlöd ezt az edzést?', () => { const c=cur(); c.sessions=c.sessions.filter(x=>x.id!==sid); save(); ui=null; render(); }); }
+  else if(a==='close'){ ui=null; render(); }
+  else if(a==='export'){ exportFile(); }
+  else if(a==='wipe'){ ask('Biztosan törlöd az ÖSSZES adatot (vendégek, naptár, árak, szabadság)?', () => ask('Utolsó megerősítés: a törlés nem vonható vissza. Készítettél mentést?', () => { const cfg = db.cfg; db = normalize({clients:[], lastExport:null, cfg}); save(); view='list'; tab='clients'; render(); })); }
+
+  /* naptár */
+  else if(a==='wk'){ const n=+b.dataset.n; calWeek = n===0 ? mondayOf(today()) : addDays(calWeek||mondayOf(today()), 7*n); render(); window.scrollTo(0,0); }
+  else if(a==='newslot'){ ui={type:'newslot',rows:[0,1,2,3].map(() => ({time:'',dur:60,days:[]}))}; render(); }
+  else if(a==='radd'){ readRows(); ui.rows.push({time:'',dur:60,days:[]}); renderModal(); }
+  else if(a==='rrm'){ readRows(); ui.rows.splice(+b.dataset.i,1); renderModal(); }
+  else if(a==='rday'){ readRows(); const r=ui.rows[+b.dataset.i], k=+b.dataset.k, j=r.days.indexOf(k); if(j>=0) r.days.splice(j,1); else r.days.push(k); renderModal(); }
+  else if(a==='rpre'){ readRows(); const r=ui.rows[+b.dataset.i], pr=b.dataset.p; r.days = pr==='wd' ? [1,2,3,4,5] : pr==='all' ? [1,2,3,4,5,6,7] : []; renderModal(); }
+  else if(a==='saveslot'){
+    readRows();
+    const filled = ui.rows.filter(r => r.time || r.days.length);
+    if(filled.some(r => !r.time || !r.days.length)) return note('Van olyan sor, ahol hiányzik a kezdési idő vagy a nap. Töltsd ki, vagy töröld a sort.');
+    if(!filled.length) return note('Adj meg legalább egy kezdési időt és egy napot.');
+    let add = 0, skip = 0;
+    filled.forEach(r => r.days.forEach(dow => {
+      if(db.slots.some(s => s.dow===dow && s.time===r.time)) skip++;
+      else { db.slots.push({id:uid(), dow, time:r.time, dur:r.dur}); add++; }
+    }));
+    if(add && !db.calStart) db.calStart = today();
+    save(); ui=null; render();
+    if(skip) note(`${add} új időpont felvéve, ${skip} már létezett, azt kihagytam.`);
+  }
+  else if(a==='rm'){
+    const cur = today().slice(0,7), n = +b.dataset.n, nx = addMonths(cur,1);
+    const earliest = db.clients.flatMap(c => c.sessions.map(x => x.date.slice(0,7))).concat([cur]).sort()[0];
+    revMonth = n===0 ? cur : addMonths(revMonth||cur, n);
+    if(revMonth > nx) revMonth = nx;
+    if(revMonth < earliest) revMonth = earliest;
+    render(); window.scrollTo(0,0);
+  }
+  else if(a==='editprice'){
+    const p = db.prices.length ? (priceAt(today()) || db.prices[0]) : null;
+    ui = {type:'price', first:!db.prices.length, pack:p?String(p.pack):'', single:p?String(p.single):'', from:today()}; render();
+  }
+  else if(a==='saveprice'){
+    const pack = parseMoney(document.getElementById('p-pack').value), single = parseMoney(document.getElementById('p-single').value);
+    if(pack===null || single===null) return note('Adj meg mindkét árat számokkal (Ft).');
+    let from = '1970-01-01';
+    if(!ui.first){
+      from = document.getElementById('p-from').value || today();
+      /* a már rögzített edzések értékét befagyasztjuk a régi árral */
+      db.clients.forEach(c => { const vals = sessionValues(c); c.sessions.forEach(x => { if(x.val===undefined && vals.has(x.id)) x.val = vals.get(x.id); }); });
+    }
+    db.prices = db.prices.filter(p => p.from!==from);
+    db.prices.push({from, pack, single});
+    db.prices.sort((x,y) => x.from.localeCompare(y.from));
+    save(); ui=null; render();
+  }
+  else if(a==='newoff'){ ui={type:'off', from:today(), to:today(), note:''}; render(); }
+  else if(a==='editoff'){ const o=db.offs.find(x=>x.id===id); ui={type:'off', id, from:o.from, to:o.to, note:o.note||''}; render(); }
+  else if(a==='saveoff'){
+    const from = document.getElementById('f-from').value, to = document.getElementById('f-to').value, nt = document.getElementById('f-note').value.trim();
+    if(!from || !to) return note('Add meg a kezdő és a záró dátumot.');
+    if(to < from) return note('A vége nem lehet korábbi, mint a kezdete.');
+    if(ui.id){ const o = db.offs.find(x=>x.id===ui.id); o.from=from; o.to=to; o.note=nt; }
+    else db.offs.push({id:uid(), from, to, note:nt});
+    save(); ui=null; render();
+    ask('Szabadság mentve. Készítesz most biztonsági mentést?', () => exportFile());
+  }
+  else if(a==='deloff'){
+    const oid = ui.id;
+    ask('Törlöd ezt a szabadság / betegség bejegyzést? A foglalásokhoz nem nyúl, csak a piros jelölés tűnik el.', () => { db.offs = db.offs.filter(x=>x.id!==oid); save(); ui=null; render(); });
+  }
+  else if(a==='slot'){ ui={type:'slot', slotId:b.dataset.s, date:b.dataset.d}; render(); }
+  else if(a==='payfilter'){ payOnly = !payOnly; render(); }
+  else if(a==='newpay'){ ui={type:'pay', cid:view, pack:+b.dataset.p, date:today(), method:null}; render(); }
+  else if(a==='editpay'){ const c=cur(), pay=(c.pays||[]).find(x=>x.pack===+b.dataset.p); if(!pay) return; ui={type:'pay', cid:c.id, pack:pay.pack, id:pay.id, date:pay.date, method:pay.method}; render(); }
+  else if(a==='paym'){ readPayForm(); ui.method = b.dataset.k; renderModal(); }
+  else if(a==='savepay'){
+    readPayForm();
+    if(!ui.method) return note('Válaszd ki, hogyan fizetett.');
+    if(ui.date > today()) return note('A fizetés dátuma nem lehet jövőbeli.');
+    const c = db.clients.find(x=>x.id===ui.cid); c.pays = c.pays || [];
+    c.pays = c.pays.filter(x => x.pack!==ui.pack && x.id!==ui.id);
+    c.pays.push({id:ui.id || uid(), pack:ui.pack, date:ui.date, method:ui.method});
+    save(); ui=null; render();
+  }
+  else if(a==='delpay'){ const pid = ui.id, cid2 = ui.cid; ask('Visszavonod ezt a fizetést?', () => { const c = db.clients.find(x=>x.id===cid2); c.pays = (c.pays||[]).filter(x=>x.id!==pid); save(); ui=null; render(); }); }
+  else if(a==='newwait'){
+    const cands = activeClients().filter(c => !db.wait.some(x => x.clientId===c.id)).sort((a,b) => a.name.localeCompare(b.name,'hu'));
+    if(!cands.length) return note('Minden vendég már a várólistán van, vagy még nincs vendég. Új vendéget a Vendégek fülön vehetsz fel.');
+    ui={type:'wait', w:{clientId:cands[0].id, fix:[], flex:[], note:''}}; render();
+  }
+  else if(a==='editwait'){ const w = db.wait.find(x=>x.id===id); if(!w) return; ui={type:'wait', id, w:{clientId:w.clientId, fix:[...w.fix], flex:[...w.flex], note:w.note||''}}; render(); }
+  else if(a==='wfix' || a==='wflex'){
+    readWaitForm(); const sid = b.dataset.s, w = ui.w, me = a==='wfix' ? 'fix' : 'flex', other = a==='wfix' ? 'flex' : 'fix';
+    const i = w[me].indexOf(sid); if(i>=0) w[me].splice(i,1); else { w[me].push(sid); w[other] = w[other].filter(x => x!==sid); }
+    renderModal();
+  }
+  else if(a==='savewait'){
+    readWaitForm(); const w = ui.w;
+    if(!db.clients.some(c => c.id===w.clientId)) return;
+    const taken = id => db.members.some(m => m.clientId===w.clientId && m.slotId===id && (!m.to || m.to>=today()));
+    const drop = [...w.fix, ...w.flex].filter(taken);
+    w.fix = w.fix.filter(x => !taken(x)); w.flex = w.flex.filter(x => !taken(x));
+    if(!w.fix.length && !w.flex.length) return note(drop.length ? 'A megjelölt időpontokban a vendég már fix vendég. Jelölj meg másik időpontot.' : 'Jelölj meg legalább egy időpontot.');
+    const old = ui.id && db.wait.find(x => x.id===ui.id);
+    const entry = {id: ui.id || uid(), clientId:w.clientId, fix:w.fix, flex:w.flex, note:w.note.trim(), ts: old ? old.ts : today()};
+    if(old) Object.assign(old, entry); else db.wait.push(entry);
+    save(); ui=null; render();
+    if(drop.length) note('Néhány időpontot kihagytam, mert a vendég ott már fix vendég.');
+  }
+  else if(a==='delwait'){ const w = db.wait.find(x=>x.id===id); if(!w) return; ask(`Törlöd ${cname(w.clientId)} várólistás bejegyzését?`, () => { db.wait = db.wait.filter(x=>x.id!==id); save(); render(); }); }
+  else if(a==='wonce'){ const w = db.wait.find(x=>x.id===b.dataset.w), s = slot(); if(!w || !s) return; const err = placeOnce(s, ui.date, w.clientId); if(err) return note(err); save(); render(); }
+  else if(a==='wfixin'){ const w = db.wait.find(x=>x.id===b.dataset.w), s = slot(); if(!w || !s) return; const err = placeFix(s, ui.date, w.clientId); if(err) return note(err); db.wait = db.wait.filter(x=>x.id!==w.id); save(); render(); }
+  else if(a==='delslot'){
+    const s = slot(); if(!s) return;
+    ask(`Törlöd a(z) ${DOW[s.dow-1]} ${s.time}–${endTime(s)} időpontot a fix vendégeivel együtt? (A rögzített edzések megmaradnak.)`, () => {
+      db.slots = db.slots.filter(x=>x.id!==s.id);
+      db.members = db.members.filter(x=>x.slotId!==s.id);
+      db.skips = db.skips.filter(x=>x.slotId!==s.id);
+      db.extras = db.extras.filter(x=>x.slotId!==s.id);
+      save(); ui=null; render();
+    });
+  }
+  else if(a==='done' && ui && ui.date > today()){ note('Jövőbeli alkalmat nem lehet megtartottnak jelölni.'); }
+  else if(a==='done'){ ui.done = {cid, tags:[], weight:'', note:''}; render(); }
+  else if(a==='ddetail'){
+    const s = slot(), c = db.clients.find(x=>x.id===cid), ds = doneOf(c, sessKey(s.id,cid,ui.date), ui.date);
+    if(!ds) return;
+    ui.done = {cid, edit:ds.id, tags:[...(ds.tags||[])], weight: ds.weight!=null ? String(ds.weight).replace('.',',') : '', note: ds.note||'', pay: ds.paid ? ds.paid.method : '', trial: !!ds.trial}; render();
+  }
+  else if(a==='dtag'){ readDoneForm(); const t=b.dataset.t, i=ui.done.tags.indexOf(t); if(i>=0) ui.done.tags.splice(i,1); else ui.done.tags.push(t); renderModal(); }
+  else if(a==='dpay'){ readDoneForm(); ui.done.pay = b.dataset.k; renderModal(); }
+  else if(a==='dcancel'){ ui.done = null; render(); }
+  else if(a==='dsave' || a==='dskip'){
+    if(a==='dsave') readDoneForm();
+    const d = ui.done, s = slot(), c = db.clients.find(x=>x.id===d.cid);
+    const det = a==='dsave' ? {tags:[...d.tags], weight:parseW(d.weight), note:d.note.trim()} : {tags:[], weight:null, note:''};
+    if(d.edit){ const x = c.sessions.find(y => y.id===d.edit); if(x){ Object.assign(x, det); if(a==='dsave' && (typeOf(c)==='trial' || x.trial)){ if(d.pay){ if(!x.paid || x.paid.method!==d.pay) x.paid = {date:today(), method:d.pay}; } else delete x.paid; } } }
+    else {
+      const key = sessKey(s.id,d.cid,ui.date);
+      if(!doneOf(c,key,ui.date)) c.sessions.push({id:uid(), date:ui.date, ...det, ref:key, ...(typeOf(c)==='trial' ? {trial:true} : {}), ...(a==='dsave' && d.pay && typeOf(c)==='trial' ? {paid:{date:ui.date, method:d.pay}} : {})});
+    }
+    ui.done = null; save(); render();
+  }
+  else if(a==='undone'){
+    const s = slot(), c = db.clients.find(x=>x.id===cid), key = sessKey(s.id,cid,ui.date);
+    c.sessions = c.sessions.filter(x => x.ref!==key); save(); render();
+  }
+  else if(a==='skip'){
+    const s = slot(), date = ui.date;
+    ask(`${cname(cid)} lemondja az alkalmat (${md(date)}). Egyszeri lemondás, a fix hely megmarad.`, late => {
+      if(!db.skips.some(k=>k.slotId===s.id && k.clientId===cid && k.date===date)) db.skips.push({slotId:s.id, clientId:cid, date});
+      if(late) addLost(s.id, cid, date);
+      save(); render();
+    }, 'Lemondás 24 órán belül: az alkalom elveszik (levonódik)');
+  }
+  else if(a==='unskip'){
+    const s = slot(), key = sessKey(s.id,cid,ui.date), c = db.clients.find(x=>x.id===cid);
+    db.skips = db.skips.filter(k => !(k.slotId===s.id && k.clientId===cid && k.date===ui.date));
+    c.sessions = c.sessions.filter(x => !(x.ref===key && x.lost));
+    save(); render();
+  }
+  else if(a==='late'){ addLost(slot().id, cid, ui.date); save(); render(); }
+  else if(a==='unlate'){
+    const key = sessKey(slot().id,cid,ui.date), c = db.clients.find(x=>x.id===cid);
+    c.sessions = c.sessions.filter(x => !(x.ref===key && x.lost)); save(); render();
+  }
+  else if(a==='endfix'){
+    const s = slot(), date = ui.date;
+    const m = db.members.find(x => x.slotId===s.id && x.clientId===cid && x.from<=date && (!x.to || date<=x.to));
+    if(!m) return;
+    const wasSkipped = db.skips.some(k => k.slotId===s.id && k.clientId===cid && k.date===date);
+    ask(`${cname(cid)} véglegesen kikerül a fix időpontból, ettől a naptól: ${md(date)}. Az eddigi alkalmak megmaradnak.`, late => {
+      const prev = addDays(date,-1);
+      if(late && !wasSkipped) addLost(s.id, cid, date);
+      if(prev < m.from) db.members = db.members.filter(x => x.id!==m.id); else m.to = prev;
+      db.skips = db.skips.filter(k => !(k.slotId===s.id && k.clientId===cid && k.date>=date));
+      save(); render();
+    }, wasSkipped ? null : 'A mostani alkalmat 24 órán belül mondta le: elveszik (levonódik)');
+  }
+  else if(a==='rmextra'){
+    const s = slot();
+    db.extras = db.extras.filter(x => !(x.slotId===s.id && x.clientId===cid && x.date===ui.date)); save(); render();
+  }
+  else if(a==='addone'){
+    const s = slot(), c = document.getElementById('f-cl').value, err = placeOnce(s, ui.date, c);
+    if(err) return note(err); save(); render();
+  }
+  else if(a==='addfix'){
+    const s = slot(), c = document.getElementById('f-cl').value, err = placeFix(s, ui.date, c);
+    if(err) return note(err); save(); render();
+  }
+});
+
+async function exportFile(){
+  const now = Date.now(), d = today();
+  const snap = Object.assign({}, db, {lastExport: now, bkSess: sessTotal()});
+  const name = 'Edzőapp biztonsági mentés '+d+'.json';
+  const body = JSON.stringify(snap,null,1);
+  const blob = new Blob([body], {type:'application/json'});
+  const file = new File([blob], name, {type:'application/json'});
+  try{
+    if(navigator.canShare && navigator.canShare({files:[file]})){
+      await navigator.share({files:[file], title:'Edzőapp biztonsági mentés '+d, text:'Edzőapp biztonsági mentés '+d});
+    } else {
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(()=>URL.revokeObjectURL(a.href), 10000);
+    }
+    db.lastExport = now; db.bkSess = snap.bkSess; localStorage.setItem(KEY, JSON.stringify(db)); render();
+  }catch(e){ /* a megosztás megszakítva: nem számít mentésnek */ }
+}
+function importFile(ev){
+  const f = ev.target.files[0]; if(!f) return;
+  const r = new FileReader();
+  r.onload = () => {
+    try{
+      const d = JSON.parse(r.result);
+      if(!d || typeof d!=='object' || !Array.isArray(d.clients)) throw 0;
+      ask(`Visszatöltés: ${d.clients.length} vendég. Felülírja a jelenlegi adatokat. Folytatod?`, () => {
+        db = normalize(d); db.lastExport = db.lastExport || Date.now(); db.bkSess = sessTotal(); save(); view='list'; tab='clients'; render();
+      });
+    }catch(e){ note('Ez nem érvényes mentésfájl.'); }
+  };
+  r.readAsText(f);
+}
+
+if(navigator.storage && navigator.storage.persist){ navigator.storage.persist().catch(()=>{}); }
+if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){ navigator.serviceWorker.register('sw.js').catch(()=>{}); }
+render();
+checkBackup();
+</script>
+</body>
+</html>
