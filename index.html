@@ -171,7 +171,7 @@ svg{width:100%;height:auto;display:block}
 
 <script>
 const PACK = 10;
-const VERSION = '2.2 · 2026.10.06.';
+const VERSION = '2.2.1 · 2026.10.06.';
 const capN = () => (db && db.cfg && db.cfg.cap) || 3;
 const TAGS = ['mell','hát','bicepsz','tricepsz','váll','láb','fenék','has','core','kardió','egyéb'];
 const DOW = ['Hétfő','Kedd','Szerda','Csütörtök','Péntek','Szombat','Vasárnap'];
@@ -210,7 +210,7 @@ function sanitize(d){
     c.last = !!c.last;
     c.sessions = (Array.isArray(c.sessions) ? c.sessions : []).filter(x => x && typeof x==='object' && _DT(x.date));
     c.sessions.forEach(x => {
-      x.id = _ID(x.id) || (Date.now().toString(36)+Math.random().toString(36).slice(2,7)); if(x.ref!=null) x.ref = _ID(x.ref);
+      x.id = _ID(x.id) || (Date.now().toString(36)+Math.random().toString(36).slice(2,7)); if(x.ref!=null) x.ref = String(x.ref).replace(/[^\w|-]/g,'').slice(0,120);
       x.tags = (Array.isArray(x.tags) ? x.tags : []).filter(t => TAGS.includes(t));
       x.weight = _NUM(x.weight); x.note = _STR(x.note,2000);
       if(x.val!=null){ x.val = _NUM(x.val); if(x.val==null) delete x.val; }
@@ -237,6 +237,13 @@ function sanitize(d){
   d.wait = (Array.isArray(d.wait) ? d.wait : []).filter(w => w && typeof w==='object' && _ID(w.clientId))
     .map(w => ({id:_ID(w.id)||rid(), clientId:_ID(w.clientId), fix:_ids(w.fix), flex:_ids(w.flex), note:_STR(w.note,300), ts:_DT(w.ts) ? w.ts : '2026-01-01'}))
     .filter(w => d.clients.some(c => c.id===w.clientId && !c.anon) && (w.fix.length || w.flex.length));
+  /* régi hiba javítása: a naptári hivatkozásból (időpont|vendég|dátum) kikerült elválasztók visszaállítása */
+  d.clients.forEach(c => c.sessions.forEach(x => {
+    if(!x.ref || x.ref.includes('|')) return;
+    const dm = x.ref.match(/(\d{4}-\d{2}-\d{2})$/); if(!dm) return;
+    const head = x.ref.slice(0, x.ref.length-10), sl = d.slots.find(q => head===q.id+c.id);
+    if(sl) x.ref = sl.id+'|'+c.id+'|'+dm[1];
+  }));
   d.calStart = _DT(d.calStart) ? d.calStart : null;
   d.lastExport = _NUM(d.lastExport); d.bkSess = Math.max(0, Math.round(_NUM(d.bkSess)||0));
   if(d.sort && typeof d.sort==='object'){ d.sort = {by:_STR(d.sort.by,20), dir: d.sort.dir==='desc'?'desc':'asc'}; } else delete d.sort;
