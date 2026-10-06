@@ -1,5 +1,5 @@
 /* Offline működés: az app fájljait elmenti, és internet nélkül is megnyitja. Adatot nem tárol. */
-const V = 'edzo-v1';
+const V = 'edzo-v2';
 const FILES = ['./', 'index.html', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'apple-touch-icon.png'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(V).then(c => c.addAll(FILES)).then(() => self.skipWaiting()));
