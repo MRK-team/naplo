@@ -631,7 +631,7 @@ function renderClients(hd, app, fab){
     app.innerHTML = `
       ${backupWarn()}
       <div class="card"><b>Biztonsági mentés</b>
-      <p class="sub">Az adatok csak ezen a telefonon vannak. Ha telefont cserélsz, törlöd az appot vagy a Safari adatait, az adat elvész. Ezért mentsd fájlba rendszeresen, és tedd iCloud Drive-ra vagy küldd el magadnak.</p>
+      <p class="sub">Az adatok csak ezen a telefonon vannak. Ha telefont cserélsz, törlöd az appot vagy a böngésző adatait, az adat elvész. Ezért mentsd fájlba rendszeresen, és tedd felhőtárhelyre (iCloud Drive, Google Drive) vagy küldd el magadnak.</p>
       <p class="sub">Utolsó mentés: ${db.lastExport ? md(iso(new Date(db.lastExport))) : 'még nem volt'}</p>
       <button class="big" data-a="export">Mentés fájlba</button></div>
       <div class="card"><b>Mentési emlékeztető</b>
@@ -1215,15 +1215,19 @@ async function exportFile(){
   const body = JSON.stringify(snap,null,1);
   const blob = new Blob([body], {type:'application/json'});
   const file = new File([blob], name, {type:'application/json'});
-  try{
-    if(navigator.canShare && navigator.canShare({files:[file]})){
-      await navigator.share({files:[file], title:'Edzőapp biztonsági mentés '+d, text:'Edzőapp biztonsági mentés '+d});
-    } else {
-      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); a.remove();
-      setTimeout(()=>URL.revokeObjectURL(a.href), 10000);
-    }
-    db.lastExport = now; db.bkSess = snap.bkSess; localStorage.setItem(KEY, JSON.stringify(db)); render();
-  }catch(e){ /* a megosztás megszakítva: nem számít mentésnek */ }
+  const done = () => { db.lastExport = now; db.bkSess = snap.bkSess; try{ localStorage.setItem(KEY, JSON.stringify(db)); }catch(e){} render(); };
+  const download = () => {
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(a.href), 20000);
+    done(); note('A mentésfájl letöltődött a telefonra (Letöltések mappa, „'+name+'"). Onnan küldd el vagy másold biztonságos helyre (Drive, e-mail).');
+  };
+  let canShare = false;
+  try{ canShare = !!(navigator.canShare && navigator.share && navigator.canShare({files:[file]})); }catch(e){}
+  if(canShare){
+    try{ await navigator.share({files:[file], title:'Edzőapp biztonsági mentés '+d, text:'Edzőapp biztonsági mentés '+d}); done(); return; }
+    catch(e){ if(e && e.name==='AbortError') return; /* megszakítva: nem számít mentésnek */ }
+  }
+  try{ download(); }catch(e){ note('A mentés nem sikerült: '+(e && e.message || e)); }
 }
 function importFile(ev){
   const f = ev.target.files[0]; if(!f) return;
